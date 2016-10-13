@@ -19,6 +19,7 @@ import org.hibernate.validator.ap.testmodel.annotationparameters.InvalidSizePara
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidDecimalMinMaxParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidDigitsParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidLengthParameters;
+import org.hibernate.validator.ap.testmodel.annotationparameters.ValidMessageParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidPatternParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidScriptAssertParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidSizeParameters;
@@ -247,6 +248,21 @@ public class AnnotationParametersValidationTest extends ConstraintValidationProc
 				new DiagnosticExpectation( Kind.ERROR, 44 ),
 				new DiagnosticExpectation( Kind.ERROR, 45 ),
 				new DiagnosticExpectation( Kind.ERROR, 50 )
+		);
+	}
+
+	@Test
+	public void testValidMessageParameter() {
+		File sourceFile = compilerHelper.getSourceFile( ValidMessageParameters.class );
+
+		boolean compilationResult =
+				compilerHelper.compile( new ConstraintValidationProcessor(), diagnostics, sourceFile );
+
+		assertTrue( compilationResult );
+		assertThatDiagnosticsMatch(
+				diagnostics,
+				new DiagnosticExpectation( Kind.WARNING, 78 )
+
 		);
 	}
 
