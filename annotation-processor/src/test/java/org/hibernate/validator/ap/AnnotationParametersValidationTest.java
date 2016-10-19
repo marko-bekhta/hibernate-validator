@@ -10,6 +10,10 @@ import static org.hibernate.validator.ap.testutil.CompilerTestHelper.assertThatD
 import static org.testng.Assert.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
+import java.io.File;
+
+import javax.tools.Diagnostic.Kind;
+
 import org.hibernate.validator.ap.testmodel.annotationparameters.InvalidDecimalMinMaxParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.InvalidDigitsParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.InvalidLengthParameters;
@@ -19,15 +23,13 @@ import org.hibernate.validator.ap.testmodel.annotationparameters.InvalidSizePara
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidDecimalMinMaxParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidDigitsParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidLengthParameters;
+import org.hibernate.validator.ap.testmodel.annotationparameters.ValidMessageParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidPatternParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidScriptAssertParameters;
 import org.hibernate.validator.ap.testmodel.annotationparameters.ValidSizeParameters;
 import org.hibernate.validator.ap.util.DiagnosticExpectation;
-
+import org.hibernate.validator.testutil.TestForIssue;
 import org.testng.annotations.Test;
-
-import javax.tools.Diagnostic.Kind;
-import java.io.File;
 
 /**
  * Test cases for {@link ConstraintValidationProcessor} testing the checking of annotation parameters validity.
@@ -247,6 +249,22 @@ public class AnnotationParametersValidationTest extends ConstraintValidationProc
 				new DiagnosticExpectation( Kind.ERROR, 44 ),
 				new DiagnosticExpectation( Kind.ERROR, 45 ),
 				new DiagnosticExpectation( Kind.ERROR, 50 )
+		);
+	}
+
+	@Test
+	@TestForIssue(jiraKey = "HV-822")
+	public void testValidMessageParameter() {
+		File sourceFile = compilerHelper.getSourceFile( ValidMessageParameters.class );
+
+		boolean compilationResult =
+				compilerHelper.compile( new ConstraintValidationProcessor(), diagnostics, sourceFile );
+
+		assertTrue( compilationResult );
+		assertThatDiagnosticsMatch(
+				diagnostics,
+				new DiagnosticExpectation( Kind.WARNING, 78 )
+
 		);
 	}
 
