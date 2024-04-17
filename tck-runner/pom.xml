@@ -21,6 +21,8 @@
     <description>Aggregates dependencies and runs the Jakarta Bean Validation TCK</description>
 
     <properties>
+        <!-- it must be the exact same version than the one used in the Bean Validation TCK -->
+        <version.org.assertj.assertj-core>3.8.0</version.org.assertj.assertj-core>
         <tck.suite.file>${project.build.directory}/dependency/beanvalidation-tck-tests-suite.xml</tck.suite.file>
         <wildfly.target-dir>${project.build.directory}/wildfly-${version.wildfly.tck}</wildfly.target-dir>
         <validation.provider>org.hibernate.validator.HibernateValidator</validation.provider>

@@ -170,7 +170,10 @@
         <!-- Test dependencies -->
         <version.org.jboss.arquillian>1.8.0.Final</version.org.jboss.arquillian>
         <version.org.testng>7.10.1</version.org.testng>
-        <!-- it must be the exact same version than the one used in the Bean Validation TCK -->
+        <!--
+            it must be the exact same version than the one used in the Bean Validation TCK
+            Hence it is overridden in the hibernate-validator-tck-runner and should not be changed there!
+        -->
         <version.org.assertj.assertj-core>3.25.3</version.org.assertj.assertj-core>
         <version.junit>4.13.2</version.junit>
         <version.org.easymock>5.2.0</version.org.easymock>
