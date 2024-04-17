@@ -9,7 +9,30 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-    allow:
-      - dependency-name: jakarta.*:*
-      - dependency-name: org.glassfish.expressly:expressly
-      - dependency-name: org.jboss.weld:*
+    groups:
+      # This group combines all build-only dependencies. Published artifacts do not depend on them.
+      # Grouping such dependencies will make Dependabot create PRs with a branch name
+      # following the pattern (`dependabot/maven/build-dependencies-.*`)
+      # and with a title like `Bump the build-dependencies group with 8 updates` that we can easily
+      # use for Hibernate Bot rules.
+      build-dependencies:
+        patterns:
+          # Maven plugins:
+          - "*maven*plugin*"
+          - "org.apache.maven*:*"
+          - "*surefire*"
+          - "*forbiddenapis*"
+          - "com.puppycrawl.tools:*"
+          # Other test dependencies
+          - "org.apache.groovy:groovy-jsr223"
+          - "org.openjdk.jmh:*" # performance testing dependency
+          - "com.google.guava:guava" # Guava is used in our test utils
+          - "org.asciidoctor:*" # Asciidoctor is used for rendering the documentation
+          - "org.apache.logging.log4j:*"
+          - "org.assertj:*"
+          - "org.ow2.asm:*" # for Surefire/Failsafe plugins to support builds on latest JDKs
+          - "org.junit:*"
+          - "org.jboss.weld:*"
+          - "org.easymock:*"
+          - "org.wildfly.arquillian:*"
+          - "org.wildfly.core:*"
