@@ -175,7 +175,7 @@
         <version.junit>4.13.1</version.junit>
         <version.org.easymock>3.4</version.org.easymock>
         <version.io.rest-assured>4.1.2</version.io.rest-assured>
-        <version.org.codehaus.groovy>2.4.12</version.org.codehaus.groovy>
+        <version.org.apache.groovy>4.0.21</version.org.apache.groovy>
         <version.com.google.guava>31.1-jre</version.com.google.guava>
         <version.org.springframework.spring-expression>5.3.22</version.org.springframework.spring-expression>
         <version.org.jboss.arquillian.container.arquillian-weld-embedded>3.0.2.Final</version.org.jboss.arquillian.container.arquillian-weld-embedded>
@@ -464,9 +464,9 @@
                 <version>${version.org.testng}</version>
             </dependency>
             <dependency>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>org.apache.groovy</groupId>
                 <artifactId>groovy-jsr223</artifactId>
-                <version>${version.org.codehaus.groovy}</version>
+                <version>${version.org.apache.groovy}</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
@@ -1055,9 +1055,9 @@
                     <version>${version.gmavenplus.plugin}</version>
                     <dependencies>
                         <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
+                            <groupId>org.apache.groovy</groupId>
                             <artifactId>groovy-all</artifactId>
-                            <version>${version.org.codehaus.groovy}</version>
+                            <version>${version.org.apache.groovy}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
