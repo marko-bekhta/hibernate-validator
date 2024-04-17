@@ -165,7 +165,7 @@
         <version.javax.annotation>1.2</version.javax.annotation>
 
         <!-- JavaFX dependencies (from JDK 11) -->
-        <version.org.openjfx>11.0.2</version.org.openjfx>
+        <version.org.openjfx>22</version.org.openjfx>
 
         <!-- Test dependencies -->
         <version.org.jboss.arquillian>1.7.0.Alpha10</version.org.jboss.arquillian>
