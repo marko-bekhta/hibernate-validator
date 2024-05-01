@@ -168,8 +168,8 @@
         <version.org.openjfx>22.0.1</version.org.openjfx>
 
         <!-- Test dependencies -->
-        <version.org.jboss.arquillian>1.7.0.Alpha10</version.org.jboss.arquillian>
-        <version.org.testng>6.14.3</version.org.testng>
+        <version.org.jboss.arquillian>1.8.0.Final</version.org.jboss.arquillian>
+        <version.org.testng>7.10.2</version.org.testng>
         <!-- it must be the exact same version than the one used in the Bean Validation TCK -->
         <version.org.assertj.assertj-core>3.8.0</version.org.assertj.assertj-core>
         <version.junit>4.13.2</version.junit>
@@ -178,10 +178,10 @@
         <version.org.apache.groovy>4.0.21</version.org.apache.groovy>
         <version.com.google.guava>33.1.0-jre</version.com.google.guava>
         <version.org.springframework.spring-expression>6.1.6</version.org.springframework.spring-expression>
-        <version.org.jboss.arquillian.container.arquillian-weld-embedded>3.0.2.Final</version.org.jboss.arquillian.container.arquillian-weld-embedded>
+        <version.org.jboss.arquillian.container.arquillian-weld-embedded>4.0.0.Final</version.org.jboss.arquillian.container.arquillian-weld-embedded>
         <version.com.fasterxml.jackson.core.jackson-databind>2.17.0</version.com.fasterxml.jackson.core.jackson-databind>
         <version.com.fasterxml.jackson.core.jackson-annotations>2.17.0</version.com.fasterxml.jackson.core.jackson-annotations>
-        <version.net.bytebuddy.byte-buddy>1.14.13</version.net.bytebuddy.byte-buddy>
+        <version.net.bytebuddy.byte-buddy>1.14.14</version.net.bytebuddy.byte-buddy>
 
         <!-- OSGi dependencies -->
         <version.org.apache.karaf>4.2.0</version.org.apache.karaf>
@@ -198,7 +198,7 @@
             overridden by a CI job of the Checkstyle project so that they can
             check for regressions. Which is obviously good for us, too.
          -->
-        <puppycrawl.checkstyle.version>10.15.0</puppycrawl.checkstyle.version>
+        <puppycrawl.checkstyle.version>10.16.0</puppycrawl.checkstyle.version>
 
         <!-- Asciidoctor -->
 
@@ -221,20 +221,20 @@
         <version.copy.plugin>1.0.0</version.copy.plugin>
         <version.dependency.plugin>3.6.1</version.dependency.plugin>
         <version.depends.plugin>1.5.0</version.depends.plugin>
-        <version.deploy.plugin>3.1.1</version.deploy.plugin>
+        <version.deploy.plugin>3.1.2</version.deploy.plugin>
         <version.enforcer.plugin>3.4.1</version.enforcer.plugin>
         <version.forbiddenapis.plugin>3.7</version.forbiddenapis.plugin>
         <version.gmavenplus.plugin>3.0.2</version.gmavenplus.plugin>
-        <version.gpg.plugin>3.2.3</version.gpg.plugin>
-        <version.install.plugin>3.1.1</version.install.plugin>
-        <version.japicmp.plugin>0.20.0</version.japicmp.plugin>
-        <version.jar.plugin>3.4.0</version.jar.plugin>
-        <version.jqassistant.plugin>2.1.0</version.jqassistant.plugin>
+        <version.gpg.plugin>3.2.4</version.gpg.plugin>
+        <version.install.plugin>3.1.2</version.install.plugin>
+        <version.japicmp.plugin>0.21.1</version.japicmp.plugin>
+        <version.jar.plugin>3.4.1</version.jar.plugin>
+        <version.jqassistant.plugin>2.2.0</version.jqassistant.plugin>
         <version.javadoc.plugin>3.6.3</version.javadoc.plugin>
         <version.license.plugin>4.3</version.license.plugin>
         <version.release.plugin>3.0.1</version.release.plugin>
         <version.resources.plugin>3.3.1</version.resources.plugin>
-        <version.shade.plugin>3.5.2</version.shade.plugin>
+        <version.shade.plugin>3.5.3</version.shade.plugin>
         <version.sigtest.plugin>1.7</version.sigtest.plugin>
         <version.source.plugin>3.3.1</version.source.plugin>
         <version.surefire.plugin>3.2.5</version.surefire.plugin>
