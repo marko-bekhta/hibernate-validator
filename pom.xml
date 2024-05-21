@@ -177,7 +177,7 @@
         <version.io.rest-assured>5.4.0</version.io.rest-assured>
         <version.org.apache.groovy>4.0.21</version.org.apache.groovy>
         <version.com.google.guava>33.2.0-jre</version.com.google.guava>
-        <version.org.springframework.spring-expression>6.1.6</version.org.springframework.spring-expression>
+        <version.org.springframework.spring-expression>6.1.7</version.org.springframework.spring-expression>
         <version.org.jboss.arquillian.container.arquillian-weld-embedded>4.0.0.Final</version.org.jboss.arquillian.container.arquillian-weld-embedded>
         <version.com.fasterxml.jackson.core.jackson-databind>2.17.1</version.com.fasterxml.jackson.core.jackson-databind>
         <version.com.fasterxml.jackson.core.jackson-annotations>2.17.1</version.com.fasterxml.jackson.core.jackson-annotations>
@@ -206,14 +206,14 @@
         <version.org.hibernate.infra.hibernate-asciidoctor-theme>4.0.0.Final</version.org.hibernate.infra.hibernate-asciidoctor-theme>
         <version.org.hibernate.infra.hibernate-asciidoctor-extensions>2.0.1.Final</version.org.hibernate.infra.hibernate-asciidoctor-extensions>
         <version.org.jruby>9.3.2.0</version.org.jruby>
-        <version.org.asciidoctor.asciidoctorj>2.5.12</version.org.asciidoctor.asciidoctorj>
+        <version.org.asciidoctor.asciidoctorj>2.5.13</version.org.asciidoctor.asciidoctorj>
         <version.org.asciidoctor.asciidoctorj-pdf>2.3.15</version.org.asciidoctor.asciidoctorj-pdf>
 
         <!-- Maven plugins versions -->
 
         <version.antrun.plugin>3.1.0</version.antrun.plugin>
         <version.assembly.plugin>3.7.1</version.assembly.plugin>
-        <version.buildhelper.plugin>3.5.0</version.buildhelper.plugin>
+        <version.buildhelper.plugin>3.6.0</version.buildhelper.plugin>
         <version.bundle.plugin>5.1.9</version.bundle.plugin>
         <version.checkstyle.plugin>3.3.1</version.checkstyle.plugin>
         <version.clean.plugin>3.3.2</version.clean.plugin>
