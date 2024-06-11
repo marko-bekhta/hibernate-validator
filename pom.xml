@@ -173,7 +173,7 @@
         <!-- it must be the exact same version than the one used in the Bean Validation TCK -->
         <version.org.assertj.assertj-core>3.8.0</version.org.assertj.assertj-core>
         <version.junit>4.13.2</version.junit>
-        <version.org.easymock>5.2.0</version.org.easymock>
+        <version.org.easymock>5.3.0</version.org.easymock>
         <version.io.rest-assured>5.4.0</version.io.rest-assured>
         <version.org.apache.groovy>4.0.21</version.org.apache.groovy>
         <version.com.google.guava>33.2.1-jre</version.com.google.guava>
@@ -207,7 +207,7 @@
         <version.org.hibernate.infra.hibernate-asciidoctor-extensions>2.0.1.Final</version.org.hibernate.infra.hibernate-asciidoctor-extensions>
         <version.org.jruby>9.3.2.0</version.org.jruby>
         <version.org.asciidoctor.asciidoctorj>2.5.13</version.org.asciidoctor.asciidoctorj>
-        <version.org.asciidoctor.asciidoctorj-pdf>2.3.15</version.org.asciidoctor.asciidoctorj-pdf>
+        <version.org.asciidoctor.asciidoctorj-pdf>2.3.17</version.org.asciidoctor.asciidoctorj-pdf>
 
         <!-- Maven plugins versions -->
 
@@ -215,7 +215,7 @@
         <version.assembly.plugin>3.7.1</version.assembly.plugin>
         <version.buildhelper.plugin>3.6.0</version.buildhelper.plugin>
         <version.bundle.plugin>5.1.9</version.bundle.plugin>
-        <version.checkstyle.plugin>3.3.1</version.checkstyle.plugin>
+        <version.checkstyle.plugin>3.4.0</version.checkstyle.plugin>
         <version.clean.plugin>3.3.2</version.clean.plugin>
         <version.compiler.plugin>3.13.0</version.compiler.plugin>
         <version.copy.plugin>1.0.0</version.copy.plugin>
