@@ -93,6 +93,7 @@
         <module>annotation-processor</module>
         <module>cdi</module>
         <module>performance</module>
+        <module>osgi</module>
         <module>integrationtest/wildfly</module>
         <module>integrationtest/java/modules/simple</module>
         <module>integrationtest/java/modules/no-el</module>
