@@ -51,7 +51,7 @@ pipeline {
 
 								echo "Running the reproducibility check."
 								sh """mvn clean verify \
-									artifact:compare -Dreference.repo=hibernate-maven-central \
+									artifact:compare \
 									-Preproducibility-check \
 									--fail-at-end \
 									-Dscan=false -Dno-build-cache
