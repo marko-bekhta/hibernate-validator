@@ -97,3 +97,4 @@ jobs:
       # https://github.com/actions/cache/blob/main/examples.md#java---maven
       - name: Set up Maven
         run: ./mvnw -v
+
