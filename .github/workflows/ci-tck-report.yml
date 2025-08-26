@@ -16,7 +16,7 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+*'
     branches:
-      - *
+      - '*'
 
 concurrency:
   group: "workflow = ${{ github.workflow }}, ref = ${{ github.event.ref }}, pr = ${{ github.event.pull_request.id }}"
@@ -53,6 +53,10 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: temurin
+
+      - name: prebuild
+        run: |
+          ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean install -DskipTests -Denforcer.skip=true
 
       - name: Start building the asciidoc report
         id: init-report
