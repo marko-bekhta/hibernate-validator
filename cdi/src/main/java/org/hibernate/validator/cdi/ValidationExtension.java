@@ -80,6 +80,7 @@ public class ValidationExtension implements Extension {
 
 	private static final EnumSet<ExecutableType> ALL_EXECUTABLE_TYPES =
 			EnumSet.of( ExecutableType.CONSTRUCTORS, ExecutableType.NON_GETTER_METHODS, ExecutableType.GETTER_METHODS );
+
 	private static final EnumSet<ExecutableType> DEFAULT_EXECUTABLE_TYPES =
 			EnumSet.of( ExecutableType.CONSTRUCTORS, ExecutableType.NON_GETTER_METHODS );
 
