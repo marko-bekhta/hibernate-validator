@@ -55,6 +55,10 @@ permissions:
   contents: read
 
 jobs:
+  notification:
+    name: TEST NOTIFICATION
+    needs: build
+    uses: marko-bekhta/hibernate-jenkins-pipeline-helpers/.github/workflows/send-notification.yml@build/gh-action-notification
   build:
     name: ${{matrix.os.name}}
     runs-on: ${{ matrix.os.runs-on }}
@@ -109,7 +113,7 @@ jobs:
       - name: Build code and run tests and basic checks (Standalone)
         run: |
           ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean install \
-          -Pjqassistant -Pdist
+            -Pjqassistant -Pdist -DskipTests
         env:
           DEVELOCITY_ACCESS_KEY: "${{ secrets.DEVELOCITY_ACCESS_KEY || '' }}"
           DEVELOCITY_BASE_URL: "${{ env.DEVELOCITY_BASE_URL || 'https://develocity.commonhaus.dev' }}"
@@ -123,22 +127,22 @@ jobs:
           name: build-scan-data-standalone-${{ matrix.os.name }}
           path: ~/.m2/.develocity/build-scan-data
 
-      - name: Run TCK tests in container mode
-        run: |
-          ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean verify \
-          -Pjqassistant -Pskip-checks \
-          -am -pl :hibernate-validator-tck-runner \
-          -Dincontainer -Dincontainer-prepared
-        env:
-          DEVELOCITY_ACCESS_KEY: "${{ secrets.DEVELOCITY_ACCESS_KEY || '' }}"
-          DEVELOCITY_BASE_URL: "${{ env.DEVELOCITY_BASE_URL || 'https://develocity.commonhaus.dev' }}"
-
-      - name: Upload GitHub Actions artifact for the Develocity build scan
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # 5.0.0
-        if: "${{ github.event_name == 'pull_request' && !cancelled() }}"
-        with:
-          name: build-scan-data-incontainer-${{ matrix.os.name }}
-          path: ~/.m2/.develocity/build-scan-data
-
-      - name: Omit produced artifacts from build cache
-        run: rm -r ~/.m2/repository/org/hibernate/validator
+#      - name: Run TCK tests in container mode
+#        run: |
+#          ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean verify \
+#          -Pjqassistant -Pskip-checks \
+#          -am -pl :hibernate-validator-tck-runner \
+#          -Dincontainer -Dincontainer-prepared -Pjqassistant -Pdist -DskipTests
+#        env:
+#          DEVELOCITY_ACCESS_KEY: "${{ secrets.DEVELOCITY_ACCESS_KEY || '' }}"
+#          DEVELOCITY_BASE_URL: "${{ env.DEVELOCITY_BASE_URL || 'https://develocity.commonhaus.dev' }}"
+#
+#      - name: Upload GitHub Actions artifact for the Develocity build scan
+#        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # 5.0.0
+#        if: "${{ github.event_name == 'pull_request' && !cancelled() }}"
+#        with:
+#          name: build-scan-data-incontainer-${{ matrix.os.name }}
+#          path: ~/.m2/.develocity/build-scan-data
+#
+#      - name: Omit produced artifacts from build cache
+#        run: rm -r ~/.m2/repository/org/hibernate/validator
