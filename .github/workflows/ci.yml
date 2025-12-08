@@ -113,7 +113,6 @@ jobs:
 
       - name: Build code and run tests and basic checks (Standalone)
         run: |
-          exit 1
           ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean install \
             -Pjqassistant -Pdist -DskipTests
         env:
