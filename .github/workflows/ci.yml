@@ -58,6 +58,7 @@ jobs:
   notification:
     name: TEST NOTIFICATION
     needs: build
+    if: ${{failure()}}
     uses: marko-bekhta/hibernate-jenkins-pipeline-helpers/.github/workflows/send-notification.yml@build/gh-action-notification
   build:
     name: ${{matrix.os.name}}
@@ -112,6 +113,7 @@ jobs:
 
       - name: Build code and run tests and basic checks (Standalone)
         run: |
+          exit 1
           ./mvnw $MAVEN_ARGS ${{ matrix.os.maven.args }} clean install \
             -Pjqassistant -Pdist -DskipTests
         env:
