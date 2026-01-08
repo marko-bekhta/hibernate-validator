@@ -5,10 +5,10 @@
 -->
 <!-- child.project.url.inherit.append.path is weird but necessary to have correct URLs in flattened POMs,
      see XSD for more info. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+<project xmlns="http://maven.apache.org/POM/4.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.1.0 https://maven.apache.org/xsd/maven-4.1.0.xsd"
          child.project.url.inherit.append.path="false">
-    <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.1.0</modelVersion>
 
     <groupId>org.hibernate.validator</groupId>
     <artifactId>hibernate-validator-parent</artifactId>
@@ -25,49 +25,49 @@
             <name>Emmanuel Bernard</name>
             <email>emmanuel@hibernate.org</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/emmanuel-bernard/</url>
+            <url>https://in.relation.to/emmanuel-bernard/</url>
         </developer>
         <developer>
             <id>hardy.ferentschik</id>
             <name>Hardy Ferentschik</name>
             <email>hferents@redhat.com</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/hardy-ferentschik/</url>
+            <url>https://in.relation.to/hardy-ferentschik/</url>
         </developer>
         <developer>
             <id>gunnar.morling</id>
             <name>Gunnar Morling</name>
             <email>gunnar@hibernate.org</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/gunnar-morling/</url>
+            <url>https://in.relation.to/gunnar-morling/</url>
         </developer>
         <developer>
             <id>kevinpollet</id>
             <name>Kevin Pollet</name>
             <email>kevin.pollet@serli.com</email>
             <organization>SERLI</organization>
-            <url>http://www.serli.com/</url>
+            <url>https://www.serli.com/</url>
         </developer>
         <developer>
             <id>davide.dalto</id>
             <name>Davide D'Alto</name>
             <email>davide@hibernate.org</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/davide-dalto/</url>
+            <url>https://in.relation.to/davide-dalto/</url>
         </developer>
         <developer>
             <id>guillaume.smet</id>
             <name>Guillaume Smet</name>
             <email>guillaume.smet@hibernate.org</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/guillaume-smet/</url>
+            <url>https://in.relation.to/guillaume-smet/</url>
         </developer>
         <developer>
             <id>marko.bekhta</id>
             <name>Marko Bekhta</name>
             <email>marko@hibernate.org</email>
             <organization>Red Hat, Inc.</organization>
-            <url>http://in.relation.to/marko-bekhta/</url>
+            <url>https://in.relation.to/marko-bekhta/</url>
         </developer>
     </developers>
 
@@ -85,24 +85,24 @@
         </mailingList>
     </mailingLists>
 
-    <modules>
-        <module>parents/internal</module>
-        <module>parents/public</module>
-        <module>build/build-config</module>
-        <module>build/enforcer</module>
-        <module>bom</module>
-        <module>test-utils</module>
-        <module>engine</module>
-        <module>tck-runner</module>
-        <module>annotation-processor</module>
-        <module>cdi</module>
-        <module>performance</module>
-        <module>integrationtest/wildfly</module>
-        <module>integrationtest/java/modules/simple</module>
-        <module>integrationtest/java/modules/no-el</module>
-        <module>integrationtest/java/modules/test-utils</module>
-        <module>integrationtest/java/modules/cdi</module>
-    </modules>
+    <subprojects>
+        <subproject>parents/internal</subproject>
+        <subproject>parents/public</subproject>
+        <subproject>build/build-config</subproject>
+        <subproject>build/enforcer</subproject>
+        <subproject>bom</subproject>
+        <subproject>test-utils</subproject>
+        <subproject>engine</subproject>
+        <subproject>tck-runner</subproject>
+        <subproject>annotation-processor</subproject>
+        <subproject>cdi</subproject>
+        <subproject>performance</subproject>
+        <subproject>integrationtest/wildfly</subproject>
+        <subproject>integrationtest/java/modules/simple</subproject>
+        <subproject>integrationtest/java/modules/no-el</subproject>
+        <subproject>integrationtest/java/modules/test-utils</subproject>
+        <subproject>integrationtest/java/modules/cdi</subproject>
+    </subprojects>
 
     <properties>
         <project.build.outputTimestamp>2025-11-07T22:30:30Z</project.build.outputTimestamp>
@@ -268,6 +268,7 @@
         <version.jacoco.plugin>0.8.14</version.jacoco.plugin>
         <version.sonar.plugin>5.5.0.6356</version.sonar.plugin>
         <version.maven.injection.plugin>1.0.2</version.maven.injection.plugin>
+        <version.maven-dependency-plugin>3.9.0</version.maven-dependency-plugin>
 
         <!-- Forbidden API related properties -->
         <forbiddenapis-junit.path>forbidden-junit.txt</forbiddenapis-junit.path>
@@ -368,15 +369,15 @@
 
         <!-- Set empty default values to avoid Maven leaving property references (${...}) when it doesn't find a value -->
         <!-- Argument passed from the command line -->
-        <surefire.jvm.args.commandline></surefire.jvm.args.commandline>
-        <surefire.jvm.args.additional></surefire.jvm.args.additional>
-        <surefire.jvm.args.illegal-access></surefire.jvm.args.illegal-access>
-        <surefire.jvm.args.add-opens></surefire.jvm.args.add-opens>
-        <surefire.jvm.args.java-version></surefire.jvm.args.java-version>
-        <surefire.jvm.args.jaxp.strict-args></surefire.jvm.args.jaxp.strict-args>
+        <surefire.jvm.args.commandline />
+        <surefire.jvm.args.additional />
+        <surefire.jvm.args.illegal-access />
+        <surefire.jvm.args.add-opens />
+        <surefire.jvm.args.java-version />
+        <surefire.jvm.args.jaxp.strict-args />
         <!-- JVM args generated by JaCoCo -->
-        <surefire.jvm.args.jacoco></surefire.jvm.args.jacoco>
-        <failsafe.jvm.args.jacoco></failsafe.jvm.args.jacoco>
+        <surefire.jvm.args.jacoco />
+        <failsafe.jvm.args.jacoco />
         <!--
           The arguments below are Shrinkwrap settings taken from
           https://github.com/shrinkwrap/resolver/blob/788a3c1148af3a7ebdfdaf817393273f5f5ee17b/impl-maven/src/main/java/org/jboss/shrinkwrap/resolver/impl/maven/bootstrap/MavenSettingsBuilder.java#L80
@@ -398,9 +399,9 @@
         <jacoco.environment.sub-directory>${surefire.environment}</jacoco.environment.sub-directory>
         <surefire.default.reportsDirectory>${project.build.directory}/surefire-reports</surefire.default.reportsDirectory>
 
-        <arquillian.wildfly.jvm.args.add-opens></arquillian.wildfly.jvm.args.add-opens>
-        <arquillian.wildfly.jvm.args.add-modules></arquillian.wildfly.jvm.args.add-modules>
-        <arquillian.jvm.args.java-version></arquillian.jvm.args.java-version>
+        <arquillian.wildfly.jvm.args.add-opens />
+        <arquillian.wildfly.jvm.args.add-modules />
+        <arquillian.jvm.args.java-version />
         <arquillian.wildfly.jvm.args>-Duser.language=en -Duser.country=US ${arquillian.wildfly.jvm.args.add-opens} ${arquillian.wildfly.jvm.args.add-modules} ${arquillian.jvm.args.java-version}</arquillian.wildfly.jvm.args>
 
         <!-- JDK version required for the build -->
@@ -412,7 +413,7 @@
                 - update README
                 - run mvn wrapper:wrapper to re-generate the maven wrapper
             -->
-        <maven.min.version>3.9.12</maven.min.version>
+        <maven.min.version>4.0.0-rc-5</maven.min.version>
 
         <!-- Formatting -->
         <format.skip>false</format.skip>
@@ -1203,7 +1204,9 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${version.maven-dependency-plugin}</version>
                     <executions>
                         <execution>
                             <id>unpack-asciidoctor-theme</id>
@@ -1649,9 +1652,7 @@
 
     <!-- The various child.*.append.path are weird but necessary to have correct URLs in flattened POMs,
         see XSD for more info. -->
-    <scm child.scm.connection.inherit.append.path="false"
-         child.scm.developerConnection.inherit.append.path="false"
-         child.scm.url.inherit.append.path="false">
+    <scm child.scm.connection.inherit.append.path="false" child.scm.developerConnection.inherit.append.path="false" child.scm.url.inherit.append.path="false">
         <connection>scm:git:git://github.com/hibernate/hibernate-validator.git</connection>
         <developerConnection>scm:git:git@github.com:hibernate/hibernate-validator.git</developerConnection>
         <url>http://github.com/hibernate/hibernate-validator</url>
@@ -1680,9 +1681,9 @@
                     <value>!true</value>
                 </property>
             </activation>
-            <modules>
-                <module>documentation</module>
-            </modules>
+            <subprojects>
+                <subproject>documentation</subproject>
+            </subprojects>
         </profile>
         <profile>
             <id>dist</id>
@@ -1692,9 +1693,9 @@
                     <value>!true</value>
                 </property>
             </activation>
-            <modules>
-                <module>distribution</module>
-            </modules>
+            <subprojects>
+                <subproject>distribution</subproject>
+            </subprojects>
         </profile>
         <profile>
             <id>release</id>
@@ -1979,9 +1980,9 @@
                     <name>!some.property.that.will.never.exist</name>
                 </property>
             </activation>
-            <modules>
-                <module>build/reports</module>
-            </modules>
+            <subprojects>
+                <subproject>build/reports</subproject>
+            </subprojects>
         </profile>
 
         <!-- DO NOT ADD ANY PROFILE AFTER THIS: see above -->
