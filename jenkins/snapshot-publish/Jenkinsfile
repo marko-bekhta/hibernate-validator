@@ -34,15 +34,7 @@ pipeline {
 			steps {
 				script {
 					withMaven(mavenSettingsConfig: 'ci-hibernate.deploy.settings.maven', mavenLocalRepo: env.WORKSPACE_TMP + '/.m2repository') {
-						dir('.release/scripts') {
-							sh 'git clone https://github.com/hibernate/hibernate-release-scripts.git .'
-						}
-						def version = sh(
-								script: ".release/scripts/determine-current-version.sh validator",
-								returnStdout: true
-						).trim()
-						echo "Current version: '${version}'"
-						sh "bash -xe .release/scripts/snapshot-deploy.sh validator ${version}"
+						sh "mvn clean package -e"
 					}
 				}
 			}
