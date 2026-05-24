@@ -28,6 +28,7 @@ import org.hibernate.validator.internal.metadata.DefaultBeanMetaDataClassNormali
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
 import org.hibernate.validator.internal.properties.DefaultGetterPropertySelectionStrategy;
 import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.StringHelper;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 import org.hibernate.validator.internal.util.actions.GetClassLoader;
@@ -57,7 +58,8 @@ final class ValidatorFactoryConfigurationHelper {
 	}
 
 	static Set<DefaultConstraintMapping> determineConstraintMappings(TypeResolutionHelper typeResolutionHelper,
-			ConfigurationState configurationState, JavaBeanHelper javaBeanHelper, ClassLoader externalClassLoader) {
+			ConfigurationState configurationState, JavaBeanHelper javaBeanHelper, PackageOpenerHelper packageOpenerHelper,
+			ClassLoader externalClassLoader) {
 		Set<DefaultConstraintMapping> constraintMappings = newHashSet();
 
 		if ( configurationState instanceof AbstractConfigurationImpl ) {
@@ -75,7 +77,7 @@ final class ValidatorFactoryConfigurationHelper {
 				externalClassLoader );
 
 		for ( ConstraintMappingContributor contributor : contributors ) {
-			DefaultConstraintMappingBuilder builder = new DefaultConstraintMappingBuilder( javaBeanHelper, constraintMappings );
+			DefaultConstraintMappingBuilder builder = new DefaultConstraintMappingBuilder( javaBeanHelper, packageOpenerHelper, constraintMappings );
 			contributor.createConstraintMappings( builder );
 		}
 
@@ -84,7 +86,7 @@ final class ValidatorFactoryConfigurationHelper {
 
 	static Set<DefaultConstraintMapping> determineServiceLoadedConstraintMappings(
 			TypeResolutionHelper typeResolutionHelper,
-			JavaBeanHelper javaBeanHelper, ClassLoader externalClassLoader) {
+			JavaBeanHelper javaBeanHelper, PackageOpenerHelper packageOpenerHelper, ClassLoader externalClassLoader) {
 		Set<DefaultConstraintMapping> constraintMappings = newHashSet();
 
 		// service loader based config
@@ -93,7 +95,7 @@ final class ValidatorFactoryConfigurationHelper {
 				externalClassLoader != null ? externalClassLoader : GetClassLoader.fromContext()
 		);
 		DefaultConstraintMappingBuilder builder = new DefaultConstraintMappingBuilder(
-				javaBeanHelper, constraintMappings );
+				javaBeanHelper, packageOpenerHelper, constraintMappings );
 		serviceLoaderBasedContributor.createConstraintMappings( builder );
 		return constraintMappings;
 	}
@@ -464,16 +466,19 @@ final class ValidatorFactoryConfigurationHelper {
 			implements ConstraintMappingContributor.ConstraintMappingBuilder {
 
 		private final JavaBeanHelper javaBeanHelper;
+		private final PackageOpenerHelper packageOpenerHelper;
 		private final Set<DefaultConstraintMapping> mappings;
 
-		public DefaultConstraintMappingBuilder(JavaBeanHelper javaBeanHelper, Set<DefaultConstraintMapping> mappings) {
+		public DefaultConstraintMappingBuilder(JavaBeanHelper javaBeanHelper, PackageOpenerHelper packageOpenerHelper,
+				Set<DefaultConstraintMapping> mappings) {
 			this.javaBeanHelper = javaBeanHelper;
+			this.packageOpenerHelper = packageOpenerHelper;
 			this.mappings = mappings;
 		}
 
 		@Override
 		public ConstraintMapping addConstraintMapping() {
-			DefaultConstraintMapping mapping = new DefaultConstraintMapping( javaBeanHelper );
+			DefaultConstraintMapping mapping = new DefaultConstraintMapping( javaBeanHelper, packageOpenerHelper );
 			mappings.add( mapping );
 			return mapping;
 		}

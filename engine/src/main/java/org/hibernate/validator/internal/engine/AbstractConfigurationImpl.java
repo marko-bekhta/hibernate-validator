@@ -30,6 +30,7 @@ import jakarta.validation.ValidationProviderResolver;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.spi.BootstrapState;
 import jakarta.validation.spi.ConfigurationState;
+import jakarta.validation.spi.ValidationPackageOpener;
 import jakarta.validation.spi.ValidationProvider;
 import jakarta.validation.valueextraction.ValueExtractor;
 
@@ -45,6 +46,7 @@ import org.hibernate.validator.internal.properties.DefaultGetterPropertySelectio
 import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.internal.util.CollectionHelper;
 import org.hibernate.validator.internal.util.Contracts;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.Version;
 import org.hibernate.validator.internal.util.actions.GetClassLoader;
 import org.hibernate.validator.internal.util.actions.GetInstancesFromServiceLoader;
@@ -111,6 +113,8 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 	private boolean ignoreXmlConfiguration = false;
 	private final Set<InputStream> configurationStreams = newHashSet();
 	private BootstrapConfiguration bootstrapConfiguration;
+	private final ValidationPackageOpener packageOpener;
+	private final PackageOpenerHelper packageOpenerHelper;
 
 	private final Map<ValueExtractorDescriptor.Key, ValueExtractorDescriptor> valueExtractorDescriptors = new HashMap<>();
 
@@ -136,7 +140,7 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 	private boolean showValidatedValuesInTraceLogs;
 
 	protected AbstractConfigurationImpl(BootstrapState state) {
-		this();
+		this( state.getPackageOpener() );
 		if ( state.getValidationProviderResolver() == null ) {
 			this.providerResolver = state.getDefaultValidationProviderResolver();
 		}
@@ -145,8 +149,9 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 		}
 	}
 
-	protected AbstractConfigurationImpl(ValidationProvider<?> provider) {
-		this();
+	protected AbstractConfigurationImpl(ValidationProvider<?> provider, BootstrapState state) {
+		this( state.getPackageOpener() );
+
 		if ( provider == null ) {
 			throw LOG.getInconsistentConfigurationException();
 		}
@@ -154,7 +159,9 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 		validationBootstrapParameters.setProvider( provider );
 	}
 
-	private AbstractConfigurationImpl() {
+	private AbstractConfigurationImpl(ValidationPackageOpener packageOpener) {
+		this.packageOpener = packageOpener;
+		this.packageOpenerHelper = new PackageOpenerHelper( packageOpener );
 		this.validationBootstrapParameters = new ValidationBootstrapParameters();
 
 		this.defaultConstraintValidatorFactory = new DefaultConstraintValidatorFactory();
@@ -409,7 +416,7 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 		return new DefaultConstraintMapping( new JavaBeanHelper(
 				getterPropertySelectionStrategy == null ? new DefaultGetterPropertySelectionStrategy() : getterPropertySelectionStrategy,
 				validationBootstrapParameters.getPropertyNodeNameProvider() == null ? defaultPropertyNodeNameProvider : validationBootstrapParameters.getPropertyNodeNameProvider()
-		) );
+		), packageOpenerHelper );
 	}
 
 	@Override
@@ -713,6 +720,14 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 
 	public ProcessedBeansTrackingVoter getProcessedBeansTrackingVoter() {
 		return processedBeansTrackingVoter;
+	}
+
+	public ValidationPackageOpener getPackageOpener() {
+		return packageOpener;
+	}
+
+	public PackageOpenerHelper getPackageOpenerHelper() {
+		return packageOpenerHelper;
 	}
 
 	public final Set<DefaultConstraintMapping> getProgrammaticMappings() {

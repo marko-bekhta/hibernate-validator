@@ -30,8 +30,8 @@ public class PredefinedScopeConfigurationImpl extends AbstractConfigurationImpl<
 		super( state );
 	}
 
-	public PredefinedScopeConfigurationImpl(ValidationProvider<?> validationProvider) {
-		super( validationProvider );
+	public PredefinedScopeConfigurationImpl(ValidationProvider<?> validationProvider, BootstrapState state) {
+		super( validationProvider, state );
 	}
 
 	@Override

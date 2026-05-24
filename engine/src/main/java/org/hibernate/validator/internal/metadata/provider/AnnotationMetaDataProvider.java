@@ -122,6 +122,8 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 	 * @return Retrieves constraint related meta data from the annotations of the given type.
 	 */
 	private <T> BeanConfiguration<T> retrieveBeanConfiguration(Class<T> beanClass) {
+		constraintCreationContext.getPackageOpenerHelper().openModulePackagesIfNeeded( MethodHandles.lookup(), beanClass );
+
 		Set<ConstrainedElement> constrainedElements = getFieldMetaData( beanClass );
 		constrainedElements.addAll( getMethodMetaData( beanClass ) );
 		constrainedElements.addAll( getConstructorMetaData( beanClass ) );
@@ -538,6 +540,8 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 		if ( constraintCreationContext.getConstraintHelper().isJdkAnnotation( annotation.annotationType() ) ) {
 			return Collections.emptyList();
 		}
+
+		constraintCreationContext.getPackageOpenerHelper().openModulePackagesIfNeeded( MethodHandles.lookup(), annotation.annotationType() );
 
 		List<Annotation> constraints = newArrayList();
 		Class<? extends Annotation> annotationType = annotation.annotationType();

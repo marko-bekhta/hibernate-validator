@@ -26,8 +26,8 @@ public class ConfigurationImpl extends AbstractConfigurationImpl<HibernateValida
 		super( state );
 	}
 
-	public ConfigurationImpl(ValidationProvider<?> provider) {
-		super( provider );
+	public ConfigurationImpl(ValidationProvider<?> provider, BootstrapState state) {
+		super( provider, state );
 	}
 
 	@Override

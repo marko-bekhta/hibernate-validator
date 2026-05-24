@@ -7,6 +7,7 @@ package org.hibernate.validator.internal.engine;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorManager;
 import org.hibernate.validator.internal.engine.valueextraction.ValueExtractorManager;
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 
 public class ConstraintCreationContext {
@@ -19,14 +20,18 @@ public class ConstraintCreationContext {
 
 	private final ValueExtractorManager valueExtractorManager;
 
+	private final PackageOpenerHelper packageOpenerHelper;
+
 	public ConstraintCreationContext(ConstraintHelper constraintHelper,
 			ConstraintValidatorManager constraintValidatorManager,
 			TypeResolutionHelper typeResolutionHelper,
-			ValueExtractorManager valueExtractorManager) {
+			ValueExtractorManager valueExtractorManager,
+			PackageOpenerHelper packageOpenerHelper) {
 		this.constraintHelper = constraintHelper;
 		this.constraintValidatorManager = constraintValidatorManager;
 		this.typeResolutionHelper = typeResolutionHelper;
 		this.valueExtractorManager = valueExtractorManager;
+		this.packageOpenerHelper = packageOpenerHelper;
 	}
 
 	public ConstraintHelper getConstraintHelper() {
@@ -43,5 +48,9 @@ public class ConstraintCreationContext {
 
 	public ValueExtractorManager getValueExtractorManager() {
 		return valueExtractorManager;
+	}
+
+	public PackageOpenerHelper getPackageOpenerHelper() {
+		return packageOpenerHelper;
 	}
 }

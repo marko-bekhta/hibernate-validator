@@ -23,7 +23,7 @@ public class HibernateValidator implements ValidationProvider<HibernateValidator
 
 	@Override
 	public HibernateValidatorConfiguration createSpecializedConfiguration(BootstrapState state) {
-		return HibernateValidatorConfiguration.class.cast( new ConfigurationImpl( this ) );
+		return HibernateValidatorConfiguration.class.cast( new ConfigurationImpl( this, state ) );
 	}
 
 	@Override

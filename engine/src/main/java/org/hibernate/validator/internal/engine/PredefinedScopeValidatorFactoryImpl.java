@@ -61,6 +61,7 @@ import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.internal.util.Contracts;
 import org.hibernate.validator.internal.util.ExecutableHelper;
 import org.hibernate.validator.internal.util.ExecutableParameterNameProvider;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 import org.hibernate.validator.internal.util.logging.Log;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
@@ -163,12 +164,16 @@ public class PredefinedScopeValidatorFactoryImpl implements PredefinedScopeHiber
 		);
 		TypeResolutionHelper typeResolutionHelper = new TypeResolutionHelper();
 
+		PackageOpenerHelper packageOpenerHelper = hibernateSpecificConfig.getPackageOpenerHelper();
+
 		ConstraintCreationContext constraintCreationContext = new ConstraintCreationContext(
 				constraintHelper,
-				constraintValidatorManager, typeResolutionHelper, valueExtractorManager
+				constraintValidatorManager, typeResolutionHelper, valueExtractorManager,
+				packageOpenerHelper
 		);
 
 		ExecutableHelper executableHelper = new ExecutableHelper( typeResolutionHelper );
+
 		JavaBeanHelper javaBeanHelper = new JavaBeanHelper( getterPropertySelectionStrategy, propertyNodeNameProvider );
 
 		// first we want to register any validators coming from a service loader. Since they are just loaded and there's
@@ -177,6 +182,7 @@ public class PredefinedScopeValidatorFactoryImpl implements PredefinedScopeHiber
 				determineServiceLoadedConstraintMappings(
 						typeResolutionHelper,
 						javaBeanHelper,
+						packageOpenerHelper,
 						externalClassLoader
 				),
 				constraintHelper
@@ -199,6 +205,7 @@ public class PredefinedScopeValidatorFactoryImpl implements PredefinedScopeHiber
 						typeResolutionHelper,
 						configurationState,
 						javaBeanHelper,
+						packageOpenerHelper,
 						externalClassLoader
 				)
 		);

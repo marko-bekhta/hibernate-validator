@@ -23,6 +23,7 @@ import org.hibernate.validator.internal.engine.valueextraction.ValueExtractorMan
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation.ConstraintLocationKind;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 import org.hibernate.validator.internal.util.annotation.ConstraintAnnotationDescriptor;
 import org.hibernate.validator.spi.scripting.ScriptEvaluator;
@@ -75,7 +76,8 @@ public class ConstraintValidatorInitializationHelper {
 		return new ConstraintCreationContext( ConstraintHelper.forAllBuiltinConstraints(),
 				new ConstraintValidatorManagerImpl( new DefaultConstraintValidatorFactory(), getDummyConstraintValidatorInitializationContext() ),
 				new TypeResolutionHelper(),
-				new ValueExtractorManager( Collections.emptySet() ) );
+				new ValueExtractorManager( Collections.emptySet() ),
+				new PackageOpenerHelper( (lookup, module, packageName) -> {} ) );
 	}
 
 	public static HibernateConstraintValidatorInitializationContext getConstraintValidatorInitializationContext(

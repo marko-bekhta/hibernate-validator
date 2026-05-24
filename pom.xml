@@ -102,6 +102,10 @@
         <module>integrationtest/java/modules/no-el</module>
         <module>integrationtest/java/modules/test-utils</module>
         <module>integrationtest/java/modules/cdi</module>
+        <module>integrationtest/java/modules/package-opener</module>
+        <module>integrationtest/java/modules/package-opener-constraint-annotation</module>
+        <module>integrationtest/java/modules/package-opener-xml</module>
+        <module>integrationtest/java/modules/package-opener-programmatic</module>
     </modules>
 
     <properties>

@@ -27,7 +27,7 @@ public class PredefinedScopeHibernateValidator implements ValidationProvider<Pre
 
 	@Override
 	public PredefinedScopeHibernateValidatorConfiguration createSpecializedConfiguration(BootstrapState state) {
-		return new PredefinedScopeConfigurationImpl( this );
+		return new PredefinedScopeConfigurationImpl( this, state );
 	}
 
 	@Override

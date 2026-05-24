@@ -139,6 +139,8 @@ class BeanStaxBuilder extends AbstractStaxBuilder {
 	void build(JavaBeanHelper javaBeanHelper, Set<Class<?>> processedClasses, Map<Class<?>, Set<ConstrainedElement>> constrainedElementsByType) {
 		Class<?> beanClass = classLoadingHelper.loadClass( className, defaultPackageStaxBuilder.build().orElse( "" ) );
 
+		constraintCreationContext.getPackageOpenerHelper().openModulePackagesIfNeeded( MethodHandles.lookup(), beanClass );
+
 		checkClassHasNotBeenProcessed( processedClasses, beanClass );
 
 		// update annotation ignores

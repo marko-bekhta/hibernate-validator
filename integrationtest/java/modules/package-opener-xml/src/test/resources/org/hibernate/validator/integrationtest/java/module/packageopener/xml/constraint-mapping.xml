@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    SPDX-License-Identifier: Apache-2.0
+    Copyright Red Hat Inc. and Hibernate Authors
+-->
+<constraint-mappings
+		xmlns="https://jakarta.ee/xml/ns/validation/mapping"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://jakarta.ee/xml/ns/validation/mapping
+			https://jakarta.ee/xml/ns/validation/validation-mapping-4.0.xsd"
+		version="4.0">
+
+	<default-package>org.hibernate.validator.integrationtest.java.module.packageopener.xml.model</default-package>
+
+	<bean class="XmlConstrainedBean">
+		<field name="name">
+			<constraint annotation="jakarta.validation.constraints.NotNull"/>
+		</field>
+		<field name="count">
+			<constraint annotation="jakarta.validation.constraints.Positive"/>
+		</field>
+	</bean>
+</constraint-mappings>

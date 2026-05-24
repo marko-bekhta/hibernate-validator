@@ -6,9 +6,11 @@ package org.hibernate.validator.test.cdi.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import jakarta.validation.ValidationProviderResolver;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.executable.ExecutableValidator;
+import jakarta.validation.spi.BootstrapState;
 
 import org.hibernate.validator.HibernateValidatorFactory;
 import org.hibernate.validator.cdi.internal.ValidationProviderHelper;
@@ -29,7 +31,7 @@ public class ValidationProviderHelperTest {
 						Object.class
 				);
 
-		assertThat( ValidationProviderHelper.forDefaultProvider( new MyValidationProvider.MyValidatorFactory( new ConfigurationImpl( new MyValidationProvider() ) ) )
+		assertThat( ValidationProviderHelper.forDefaultProvider( new MyValidationProvider.MyValidatorFactory( new ConfigurationImpl( new MyValidationProvider(), boostrapState() ) ) )
 				.determineValidatorFactoryCdiTypes() )
 				.containsOnly(
 						MyValidationProvider.MyValidatorFactory.class,
@@ -49,7 +51,7 @@ public class ValidationProviderHelperTest {
 						Object.class
 				);
 
-		assertThat( ValidationProviderHelper.forDefaultProvider( new MyValidationProvider.MyValidatorFactory( new ConfigurationImpl( new MyValidationProvider() ) ) )
+		assertThat( ValidationProviderHelper.forDefaultProvider( new MyValidationProvider.MyValidatorFactory( new ConfigurationImpl( new MyValidationProvider(), boostrapState() ) ) )
 				.determineValidatorCdiTypes() )
 				.containsOnly(
 						MyValidationProvider.MyValidator.class,
@@ -57,5 +59,20 @@ public class ValidationProviderHelperTest {
 						Object.class
 				);
 
+	}
+
+	private BootstrapState boostrapState() {
+		return new BootstrapState() {
+
+			@Override
+			public ValidationProviderResolver getValidationProviderResolver() {
+				return null;
+			}
+
+			@Override
+			public ValidationProviderResolver getDefaultValidationProviderResolver() {
+				return null;
+			}
+		};
 	}
 }

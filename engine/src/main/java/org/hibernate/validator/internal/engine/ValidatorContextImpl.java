@@ -160,7 +160,8 @@ public class ValidatorContextImpl implements HibernateValidatorContext {
 						? constraintCreationContext
 						: new ConstraintCreationContext( constraintCreationContext.getConstraintHelper(),
 								constraintCreationContext.getConstraintValidatorManager(), constraintCreationContext.getTypeResolutionHelper(),
-								new ValueExtractorManager( constraintCreationContext.getValueExtractorManager(), valueExtractorDescriptors ) ),
+								new ValueExtractorManager( constraintCreationContext.getValueExtractorManager(), valueExtractorDescriptors ),
+								constraintCreationContext.getPackageOpenerHelper() ),
 				validatorFactoryScopedContextBuilder.build(),
 				methodValidationConfigurationBuilder.build() );
 	}

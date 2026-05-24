@@ -60,6 +60,7 @@ import org.hibernate.validator.internal.metadata.provider.XmlMetaDataProvider;
 import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.internal.util.ExecutableHelper;
 import org.hibernate.validator.internal.util.ExecutableParameterNameProvider;
+import org.hibernate.validator.internal.util.PackageOpenerHelper;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 import org.hibernate.validator.internal.util.logging.Log;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
@@ -185,9 +186,19 @@ public class ValidatorFactoryImpl implements HibernateValidatorFactory {
 		ConstraintHelper constraintHelper = ConstraintHelper.forAllBuiltinConstraints();
 		TypeResolutionHelper typeResolutionHelper = new TypeResolutionHelper();
 
-		this.constraintCreationContext = new ConstraintCreationContext( constraintHelper, constraintValidatorManager, typeResolutionHelper, valueExtractorManager );
+		PackageOpenerHelper packageOpenerHelper;
+		if ( hibernateSpecificConfig != null ) {
+			packageOpenerHelper = hibernateSpecificConfig.getPackageOpenerHelper();
+		}
+		else {
+			packageOpenerHelper = new PackageOpenerHelper( (l, m, p) -> {} );
+		}
+
+		this.constraintCreationContext = new ConstraintCreationContext( constraintHelper, constraintValidatorManager, typeResolutionHelper, valueExtractorManager,
+				packageOpenerHelper );
 
 		this.executableHelper = new ExecutableHelper( typeResolutionHelper );
+
 		this.javaBeanHelper = new JavaBeanHelper( ValidatorFactoryConfigurationHelper.determineGetterPropertySelectionStrategy( hibernateSpecificConfig, properties, externalClassLoader ),
 				ValidatorFactoryConfigurationHelper.determinePropertyNodeNameProvider( hibernateSpecificConfig, properties, externalClassLoader ) );
 		this.beanMetadataClassNormalizer = determineBeanMetaDataClassNormalizer( hibernateSpecificConfig );
@@ -198,6 +209,7 @@ public class ValidatorFactoryImpl implements HibernateValidatorFactory {
 				determineServiceLoadedConstraintMappings(
 						typeResolutionHelper,
 						javaBeanHelper,
+						packageOpenerHelper,
 						externalClassLoader
 				),
 				constraintHelper );
@@ -217,6 +229,7 @@ public class ValidatorFactoryImpl implements HibernateValidatorFactory {
 						typeResolutionHelper,
 						configurationState,
 						javaBeanHelper,
+						packageOpenerHelper,
 						externalClassLoader
 				)
 		);

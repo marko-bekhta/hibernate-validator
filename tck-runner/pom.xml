@@ -27,6 +27,7 @@
         <version.org.assertj.assertj-core>3.27.4</version.org.assertj.assertj-core>
 
         <tck.suite.file>${project.build.directory}/dependency/validation-tck-tests-suite.xml</tck.suite.file>
+        <tck.module.suite.file>${project.build.directory}/dependency/validation-tck-module-tests-suite.xml</tck.module.suite.file>
         <validation.provider>org.hibernate.validator.HibernateValidator</validation.provider>
         <remote.debug />
 
@@ -82,6 +83,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Module path TCK tests for ValidationPackageOpener -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>validation-tck-module-tests</artifactId>
+            <version>${version.jakarta.validation.validation-tck}</version>
+        </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.testng</groupId>
             <artifactId>arquillian-testng-container</artifactId>
@@ -118,6 +125,13 @@
                                 <artifactItem>
                                     <groupId>jakarta.validation</groupId>
                                     <artifactId>validation-tck-tests</artifactId>
+                                    <type>xml</type>
+                                    <classifier>suite</classifier>
+                                    <overWrite>false</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.validation</groupId>
+                                    <artifactId>validation-tck-module-tests</artifactId>
                                     <type>xml</type>
                                     <classifier>suite</classifier>
                                     <overWrite>false</overWrite>
@@ -221,6 +235,25 @@
                                 <excludeIntegrationTests>true</excludeIntegrationTests>
                             </systemPropertyVariables>
                         </configuration>
+                        <executions>
+                            <!-- Module path tests (ValidationPackageOpener) -->
+                            <execution>
+                                <id>module-path-tests</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <suiteXmlFiles>
+                                        <suiteXmlFile>${tck.module.suite.file}</suiteXmlFile>
+                                    </suiteXmlFiles>
+                                    <systemPropertyVariables>
+                                        <!-- Module path tests don't use validation.provider;
+                                             they discover the provider via ServiceLoader in
+                                             the forked module-path JVM. -->
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

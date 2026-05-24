@@ -7,6 +7,7 @@ package org.hibernate.validator.internal.metadata;
 import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
 
 import java.lang.annotation.ElementType;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -180,6 +181,8 @@ public class PredefinedScopeBeanMetaDataManager implements BeanMetaDataManager {
 			List<MetaDataProvider> metaDataProviders,
 			Class<T> clazz
 	) {
+		constraintCreationContext.getPackageOpenerHelper().openModulePackagesIfNeeded( MethodHandles.lookup(), clazz );
+
 		BeanMetaDataBuilder<T> builder = BeanMetaDataBuilder.getInstance(
 				constraintCreationContext, executableHelper, parameterNameProvider,
 				validationOrderGenerator, clazz, methodValidationConfiguration,

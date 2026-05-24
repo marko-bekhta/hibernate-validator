@@ -9,6 +9,7 @@ import static org.hibernate.validator.internal.util.ConcurrentReferenceHashMap.O
 import static org.hibernate.validator.internal.util.ConcurrentReferenceHashMap.ReferenceType.SOFT;
 import static org.hibernate.validator.internal.util.logging.Messages.MESSAGES;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -53,6 +54,7 @@ import org.hibernate.validator.spi.tracking.ProcessedBeansTrackingVoter;
  * @author Guillaume Smet
 */
 public class BeanMetaDataManagerImpl implements BeanMetaDataManager {
+
 	/**
 	 * The default initial capacity for this cache.
 	 */
@@ -195,6 +197,8 @@ public class BeanMetaDataManagerImpl implements BeanMetaDataManager {
 	 * @return A bean meta data object for the given type.
 	 */
 	private <T> BeanMetaDataImpl<T> createBeanMetaData(Class<T> clazz) {
+		constraintCreationContext.getPackageOpenerHelper().openModulePackagesIfNeeded( MethodHandles.lookup(), clazz );
+
 		BeanMetaDataBuilder<T> builder = BeanMetaDataBuilder.getInstance(
 				constraintCreationContext, executableHelper, parameterNameProvider,
 				validationOrderGenerator, clazz, methodValidationConfiguration,
