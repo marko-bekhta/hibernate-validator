@@ -35,27 +35,20 @@ import org.testng.annotations.Test;
 @TestForIssue(jiraKey = "HV-1903")
 public class LogValidatedValueConfigurationTest {
 
-	ListAppender simpleAppender;
-	ListAppender composingAppender;
+	ListAppender appender;
 
 	@BeforeTest
 	public void setUp() {
 		LoggerContext context = LoggerContext.getContext( false );
-		simpleAppender = new ListAppender( "simple" );
-		context.getLogger( "org.hibernate.validator.internal.engine.constraintvalidation.SimpleConstraintTree" )
-				.addAppender( simpleAppender );
-		simpleAppender.clear();
-
-		composingAppender = new ListAppender( "composing" );
-		context.getLogger( "org.hibernate.validator.internal.engine.constraintvalidation.ComposingConstraintTree" )
-				.addAppender( composingAppender );
-		composingAppender.clear();
+		appender = new ListAppender( "constraintTree" );
+		context.getLogger( "org.hibernate.validator.internal.engine.constraintvalidation.ConstraintTree" )
+				.addAppender( appender );
+		appender.clear();
 	}
 
 	@AfterTest
 	public void tearDown() {
-		simpleAppender.clear();
-		composingAppender.clear();
+		appender.clear();
 	}
 
 	@Test
@@ -74,12 +67,7 @@ public class LogValidatedValueConfigurationTest {
 		);
 
 		assertTrue(
-				simpleAppender.getEvents().stream()
-						.map( event -> event.getMessage().getFormattedMessage() )
-						.anyMatch( m -> m.startsWith( "Validating value 123 against constraint defined by" ) )
-		);
-		assertTrue(
-				composingAppender.getEvents().stream()
+				appender.getEvents().stream()
 						.map( event -> event.getMessage().getFormattedMessage() )
 						.anyMatch( m -> m.startsWith( "Validating value 123 against constraint defined by" ) )
 		);
@@ -100,12 +88,7 @@ public class LogValidatedValueConfigurationTest {
 		);
 
 		assertTrue(
-				simpleAppender.getEvents().stream()
-						.map( event -> event.getMessage().getFormattedMessage() )
-						.anyMatch( m -> m.startsWith( "Validating against constraint defined by" ) )
-		);
-		assertTrue(
-				composingAppender.getEvents().stream()
+				appender.getEvents().stream()
 						.map( event -> event.getMessage().getFormattedMessage() )
 						.anyMatch( m -> m.startsWith( "Validating against constraint defined by" ) )
 		);
@@ -128,12 +111,7 @@ public class LogValidatedValueConfigurationTest {
 		);
 
 		assertTrue(
-				simpleAppender.getEvents().stream()
-						.map( event -> event.getMessage().getFormattedMessage() )
-						.anyMatch( m -> m.startsWith( "Validating value 123 against constraint defined by" ) )
-		);
-		assertTrue(
-				composingAppender.getEvents().stream()
+				appender.getEvents().stream()
 						.map( event -> event.getMessage().getFormattedMessage() )
 						.anyMatch( m -> m.startsWith( "Validating value 123 against constraint defined by" ) )
 		);

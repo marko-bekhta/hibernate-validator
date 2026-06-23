@@ -24,6 +24,8 @@ import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator
 import org.hibernate.validator.constraintvalidation.HibernateConstraintViolationBuilder;
 import org.hibernate.validator.constraintvalidation.HibernateCrossParameterConstraintValidatorContext;
 import org.hibernate.validator.internal.engine.path.MutablePath;
+import org.hibernate.validator.internal.engine.validationcontext.ValidationContext;
+import org.hibernate.validator.internal.engine.valuecontext.ValueContext;
 import org.hibernate.validator.internal.util.CollectionHelper;
 import org.hibernate.validator.internal.util.Contracts;
 import org.hibernate.validator.internal.util.logging.Log;
@@ -206,6 +208,23 @@ public class ConstraintValidatorContextImpl implements HibernateCrossParameterCo
 
 		if ( this.constraintViolationCreationContexts != null && !this.constraintViolationCreationContexts.isEmpty() ) {
 			contexts.addAll( this.constraintViolationCreationContexts );
+		}
+	}
+
+	public void contributeConstraintViolations(ValidationContext<?> validationContext, ValueContext<?, ?> valueContext) {
+		if ( defaultDisabled ) {
+			if ( this.constraintViolationCreationContexts == null || this.constraintViolationCreationContexts.isEmpty() ) {
+				throw LOG.getAtLeastOneCustomMessageMustBeCreatedException();
+			}
+		}
+		else {
+			validationContext.addConstraintFailure( valueContext, getDefaultConstraintViolationCreationContext() );
+		}
+
+		if ( this.constraintViolationCreationContexts != null && !this.constraintViolationCreationContexts.isEmpty() ) {
+			for ( ConstraintViolationCreationContext constraintViolationCreationContext : this.constraintViolationCreationContexts ) {
+				validationContext.addConstraintFailure( valueContext, constraintViolationCreationContext );
+			}
 		}
 	}
 
