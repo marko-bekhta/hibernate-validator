@@ -20,6 +20,7 @@ import jakarta.validation.metadata.ConstraintDescriptor;
 
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorInitializationContext;
 import org.hibernate.validator.internal.engine.MessageInterpolatorContext;
+import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintTree;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorManager;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintViolationCreationContext;
@@ -97,6 +98,8 @@ abstract class AbstractValidationContext<T> implements BaseBeanValidationContext
 
 	protected final ConstraintValidatorContextImpl constraintValidatorReusableContext;
 
+	private final boolean constraintTreeTraceEnabled;
+
 	/**
 	 * Contains all failing constraints so far.
 	 */
@@ -132,6 +135,8 @@ abstract class AbstractValidationContext<T> implements BaseBeanValidationContext
 				validatorScopedContext.getConstraintExpressionLanguageFeatureLevel(),
 				validatorScopedContext.getCustomViolationExpressionLanguageFeatureLevel()
 		);
+
+		this.constraintTreeTraceEnabled = ConstraintTree.isTraceEnabled();
 	}
 
 	@Override
@@ -167,6 +172,11 @@ abstract class AbstractValidationContext<T> implements BaseBeanValidationContext
 	@Override
 	public boolean isShowValidatedValuesInTraceLogs() {
 		return validatorScopedContext.isShowValidatedValuesInTraceLogs();
+	}
+
+	@Override
+	public boolean isConstraintTreeTraceEnabled() {
+		return constraintTreeTraceEnabled;
 	}
 
 	@Override

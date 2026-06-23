@@ -42,6 +42,8 @@ public interface ValidationContext<T> {
 
 	boolean isShowValidatedValuesInTraceLogs();
 
+	boolean isConstraintTreeTraceEnabled();
+
 	ConstraintValidatorManager getConstraintValidatorManager();
 
 	HibernateConstraintValidatorInitializationContext getConstraintValidatorInitializationContext();

@@ -42,6 +42,10 @@ public final class ConstraintTree<A extends Annotation> {
 
 	private static final Log LOG = LoggerFactory.make( MethodHandles.lookup() );
 
+	public static boolean isTraceEnabled() {
+		return LOG.isEnabled( Logger.Level.TRACE );
+	}
+
 	private enum Strategy {
 		SIMPLE,
 		REPORT_AS_SINGLE,
@@ -492,7 +496,7 @@ public final class ConstraintTree<A extends Annotation> {
 			ValueContext<?, ?> valueContext,
 			ConstraintValidatorContextImpl constraintValidatorContext,
 			ConstraintValidator<A, V> validator) {
-		if ( LOG.isEnabled( Logger.Level.TRACE ) ) {
+		if ( validationContext.isConstraintTreeTraceEnabled() ) {
 			if ( validationContext.isShowValidatedValuesInTraceLogs() ) {
 				LOG.tracef(
 						"Validating value %s against constraint defined by %s.",
