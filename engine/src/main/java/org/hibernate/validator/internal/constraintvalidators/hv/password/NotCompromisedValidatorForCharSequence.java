@@ -10,6 +10,8 @@ import java.util.Arrays;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.metadata.ConstraintDescriptor;
 
+import org.hibernate.validator.bean.BeanReference;
+import org.hibernate.validator.bean.BeanRetrieval;
 import org.hibernate.validator.constraints.NotCompromised;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
@@ -28,9 +30,14 @@ public class NotCompromisedValidatorForCharSequence implements HibernateConstrai
 	@Override
 	public void initialize(ConstraintDescriptor<NotCompromised> constraintDescriptor,
 			HibernateConstraintValidatorInitializationContext initializationContext) {
-		this.checker = initializationContext.getValidationService( CompromisedPasswordChecker.class );
-		if ( this.checker == null ) {
-			throw LOG.getNoCompromisedPasswordCheckerException();
+		String checkerRef = constraintDescriptor.getAnnotation().checker();
+		if ( checkerRef.isEmpty() ) {
+			this.checker = initializationContext.getBeanResolver()
+					.resolve( CompromisedPasswordChecker.class, BeanRetrieval.ANY ).get();
+		}
+		else {
+			this.checker = initializationContext.getBeanResolver()
+					.resolve( BeanReference.parse( CompromisedPasswordChecker.class, checkerRef ) ).get();
 		}
 	}
 
