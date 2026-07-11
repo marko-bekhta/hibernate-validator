@@ -28,8 +28,7 @@ import org.testng.annotations.Test;
 @TestForIssue(jiraKey = "HV-1237")
 public class NestedCascadingArraySupportTest {
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
+	@Test
 	public void testNestedOnArray() {
 		Validator validator = Validation.byProvider( HibernateValidator.class )
 				.configure()

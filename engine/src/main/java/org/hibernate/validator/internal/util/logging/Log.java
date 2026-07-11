@@ -965,4 +965,12 @@ public interface Log extends BasicLogger {
 
 	@Message(id = 274, value = "Unsupported operation for the current constraint validator kind.")
 	AssertionError getUnexpectedConstraintValidatorContextCall();
+
+	@Message(id = 275,
+			value = "Invalid array validation target configuration for constraint %2$s on %1$s. You can only define one of 'ArrayValidationTarget.Element' or 'ArrayValidationTarget.Array'.")
+	ConstraintDeclarationException getInvalidArrayValidationTargetConfigurationForConstraintException(Constrainable constrainable,
+			@FormatWith(ClassObjectFormatter.class) Class<? extends Annotation> constraint);
+
+	@Message(id = 276, value = "ArrayValidationTarget payload is only supported on array-typed declarations, but was found on %1$s of type %2$s.")
+	ConstraintDeclarationException getArrayValidationTargetOnNonArrayException(Constrainable constrainable, @FormatWith(ClassObjectFormatter.class) Class<?> type);
 }

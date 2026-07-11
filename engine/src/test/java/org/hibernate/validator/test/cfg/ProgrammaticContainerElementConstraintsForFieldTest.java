@@ -166,7 +166,7 @@ public class ProgrammaticContainerElementConstraintsForFieldTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForArrayTypedFieldProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();
@@ -187,7 +187,7 @@ public class ProgrammaticContainerElementConstraintsForFieldTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForListContainingArrayTypeFieldProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();
@@ -208,7 +208,7 @@ public class ProgrammaticContainerElementConstraintsForFieldTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForMultiDimensionalArrayTypeFieldProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();

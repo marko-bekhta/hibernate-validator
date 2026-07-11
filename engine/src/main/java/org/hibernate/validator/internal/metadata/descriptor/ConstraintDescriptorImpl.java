@@ -39,6 +39,7 @@ import jakarta.validation.valueextraction.Unwrapping;
 
 import org.hibernate.validator.constraints.CompositionType;
 import org.hibernate.validator.constraints.ConstraintComposition;
+import org.hibernate.validator.engine.ArrayValidationTarget;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorDescriptor;
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
 import org.hibernate.validator.internal.metadata.core.ConstraintOrigin;
@@ -154,6 +155,11 @@ public class ConstraintDescriptorImpl<T extends Annotation> implements Constrain
 	private final ConstraintTarget validationAppliesTo;
 
 	/**
+	 * The array validation target override, if any.
+	 */
+	private final ArrayValidationTargetOverride arrayValidationTargetOverride;
+
+	/**
 	 * Type indicating how composing constraints should be combined. By default this is set to
 	 * {@code ConstraintComposition.CompositionType.AND}.
 	 */
@@ -181,6 +187,7 @@ public class ConstraintDescriptorImpl<T extends Annotation> implements Constrain
 		this.payloads = buildPayloadSet( annotationDescriptor );
 
 		this.valueUnwrapping = determineValueUnwrapping( this.payloads, constrainable, annotationDescriptor.getType() );
+		this.arrayValidationTargetOverride = determineArrayValidationTarget( this.payloads, constrainable, annotationDescriptor.getType() );
 
 		this.validationAppliesTo = determineValidationAppliesTo( annotationDescriptor );
 
@@ -274,6 +281,10 @@ public class ConstraintDescriptorImpl<T extends Annotation> implements Constrain
 	@Override
 	public ValidateUnwrappedValue getValueUnwrapping() {
 		return valueUnwrapping;
+	}
+
+	public ArrayValidationTargetOverride getArrayValidationTargetOverride() {
+		return arrayValidationTargetOverride;
 	}
 
 	@Override
@@ -488,6 +499,25 @@ public class ConstraintDescriptorImpl<T extends Annotation> implements Constrain
 		}
 
 		return ValidateUnwrappedValue.DEFAULT;
+	}
+
+	private static ArrayValidationTargetOverride determineArrayValidationTarget(Set<Class<? extends Payload>> payloads, Constrainable constrainable, Class<? extends Annotation> annotationType) {
+		boolean hasElement = payloads.contains( ArrayValidationTarget.Element.class );
+		boolean hasArray = payloads.contains( ArrayValidationTarget.Array.class );
+
+		if ( hasElement && hasArray ) {
+			throw LOG.getInvalidArrayValidationTargetConfigurationForConstraintException( constrainable, annotationType );
+		}
+
+		if ( hasElement ) {
+			return ArrayValidationTargetOverride.ELEMENT;
+		}
+
+		if ( hasArray ) {
+			return ArrayValidationTargetOverride.ARRAY;
+		}
+
+		return ArrayValidationTargetOverride.DEFAULT;
 	}
 
 	private static ConstraintTarget determineValidationAppliesTo(ConstraintAnnotationDescriptor<?> annotationDescriptor) {
@@ -789,6 +819,15 @@ public class ConstraintDescriptorImpl<T extends Annotation> implements Constrain
 		public String toString() {
 			return "ClassIndexWrapper [clazz=" + StringHelper.toShortString( clazz ) + ", index=" + index + "]";
 		}
+	}
+
+	/**
+	 * Per-constraint override of array validation target via payload.
+	 */
+	public enum ArrayValidationTargetOverride {
+		DEFAULT,
+		ELEMENT,
+		ARRAY
 	}
 
 	/**

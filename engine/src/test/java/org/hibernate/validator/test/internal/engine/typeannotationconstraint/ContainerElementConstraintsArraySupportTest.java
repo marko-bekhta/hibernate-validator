@@ -21,6 +21,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import org.hibernate.validator.engine.ArrayValidationTarget;
 import org.hibernate.validator.internal.engine.path.MutableNode;
 import org.hibernate.validator.testutil.TestForIssue;
 
@@ -28,7 +29,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * Tests Java 8 type use annotations.
+ * Tests array container element validation with JLS type-use annotation semantics.
+ * <p>
+ * Leftmost annotations ({@code @Email String[]}) target the element type per JLS §9.7.4.
  *
  * @author Khalid Alqinyah
  * @author Hardy Ferentschik
@@ -45,9 +48,8 @@ public class ContainerElementConstraintsArraySupportTest {
 
 	// Array
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void field_constraint_provided_on_type_parameter_of_an_array_gets_validated() {
 		TypeWithArray1 a = new TypeWithArray1();
 		a.names = new String[] { "First", "", null };
@@ -73,9 +75,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void constraint_provided_on_custom_bean_used_as_array_parameter_gets_validated() {
 		TypeWithArray3 a = new TypeWithArray3();
 		a.bars = new Bar[] { new Bar( 2 ), null };
@@ -94,9 +95,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void constraints_specified_on_array_and_on_type_parameter_of_array_get_validated() {
 		TypeWithArray4 a = new TypeWithArray4();
 		a.names = new String[] { "First", "", null };
@@ -122,9 +122,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void getter_constraint_provided_on_type_parameter_of_an_array_gets_validated() {
 		TypeWithArray5 a = new TypeWithArray5();
 		a.strings = new String[] { "", "First", null };
@@ -150,9 +149,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void return_value_constraint_provided_on_type_parameter_of_an_array_gets_validated() throws Exception {
 		Method method = TypeWithArray6.class.getDeclaredMethod( "returnStrings" );
 		Set<ConstraintViolation<TypeWithArray6>> constraintViolations = validator.forExecutables().validateReturnValue(
@@ -182,9 +180,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void property_path_contains_index_information_for_array() {
 		TypeWithArray1 a = new TypeWithArray1();
 		a.names = new String[] { "" };
@@ -200,9 +197,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void method_parameter_constraint_provided_as_type_parameter_of_an_array_gets_validated() throws Exception {
 		Method method = TypeWithArray7.class.getDeclaredMethod( "setValues", String[].class );
 		Object[] values = new Object[] { new String[] { "", "First", null } };
@@ -234,9 +230,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void constructor_parameter_constraint_provided_on_type_parameter_of_an_array_gets_validated()
 			throws Exception {
 		Constructor<TypeWithArray8> constructor = TypeWithArray8.class.getDeclaredConstructor( String[].class );
@@ -270,9 +265,8 @@ public class ContainerElementConstraintsArraySupportTest {
 
 	// Array of primitives
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void field_constraint_provided_on_type_parameter_of_an_array_of_primitives_gets_validated() {
 		TypeWithArrayOfPrimitives1 a = new TypeWithArrayOfPrimitives1();
 		a.ints = new int[] { 6, 1 };
@@ -288,11 +282,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// case 3 does not make sense here so we skip it
-
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void constraints_specified_on_array_and_on_type_parameter_of_array_of_primitives_get_validated() {
 		TypeWithArrayOfPrimitives4 a = new TypeWithArrayOfPrimitives4();
 		a.ints = new int[] { 6, 1 };
@@ -313,9 +304,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void getter_constraint_provided_on_type_parameter_of_an_array_of_primitives_gets_validated() {
 		TypeWithArrayOfPrimitives5 a = new TypeWithArrayOfPrimitives5();
 		a.ints = new int[] { 6, 1 };
@@ -331,9 +321,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void return_value_constraint_provided_on_type_parameter_of_an_array_of_primitives_gets_validated()
 			throws Exception {
 		Method method = TypeWithArrayOfPrimitives6.class.getDeclaredMethod( "returnInts" );
@@ -352,9 +341,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void property_path_contains_index_information_for_array_of_primitives() {
 		TypeWithArrayOfPrimitives1 a = new TypeWithArrayOfPrimitives1();
 		a.ints = new int[] { 1 };
@@ -369,9 +357,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void method_parameter_constraint_provided_as_type_parameter_of_an_array_of_primitives_gets_validated()
 			throws Exception {
 		Method method = TypeWithArrayOfPrimitives7.class.getDeclaredMethod( "setValues", int[].class );
@@ -392,9 +379,8 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
-	@TestForIssue(jiraKey = "HV-1175")
+	@Test
+	@TestForIssue(jiraKey = "HV-1428")
 	public void constructor_parameter_constraint_provided_on_type_parameter_of_an_array_of_primitives_gets_validated()
 			throws Exception {
 		Constructor<TypeWithArrayOfPrimitives8> constructor = TypeWithArrayOfPrimitives8.class.getDeclaredConstructor( int[].class );
@@ -414,33 +400,36 @@ public class ContainerElementConstraintsArraySupportTest {
 		);
 	}
 
-	// Array of objects
+	// Model classes — JLS-correct annotation positions (leftmost = element type)
 
 	static class TypeWithArray1 {
-		@Valid
-		String @NotNull @NotBlank [] names;
+		@NotNull
+		@NotBlank
+		String[] names;
 	}
 
 	static class TypeWithArray2 {
-		String @NotNull @NotBlank [] names;
+		@NotNull
+		@NotBlank
+		String[] names;
 	}
 
 	static class TypeWithArray3 {
 		@Valid
-		Bar @NotNull [] bars;
+		@NotNull
+		Bar[] bars;
 	}
 
 	static class TypeWithArray4 {
-		@Valid
-		@Size(min = 1)
-		String @NotBlank [] names;
+		@NotBlank
+		@Size(min = 1, payload = ArrayValidationTarget.Array.class)
+		String[] names;
 	}
 
 	static class TypeWithArray5 {
 		String[] strings;
 
-		@Valid
-		public String @NotNull @NotBlank [] getStrings() {
+		public @NotNull @NotBlank String[] getStrings() {
 			return strings;
 		}
 	}
@@ -448,46 +437,43 @@ public class ContainerElementConstraintsArraySupportTest {
 	static class TypeWithArray6 {
 		String[] strings;
 
-		@Valid
-		public String @NotNull @NotBlank [] returnStrings() {
+		public @NotNull @NotBlank String[] returnStrings() {
 			return strings;
 		}
 	}
 
 	static class TypeWithArray7 {
-		public void setValues(@Valid String @NotNull @NotBlank [] arrayParameter) {
+		public void setValues(@NotNull @NotBlank String[] arrayParameter) {
 		}
 	}
 
 	static class TypeWithArray8 {
-		public TypeWithArray8(@Valid String @NotNull @NotBlank [] arrayParameter) {
+		public TypeWithArray8(@NotNull @NotBlank String[] arrayParameter) {
 		}
 	}
 
-	// Array of primitives
+	// Array of primitives — JLS-correct (leftmost = element type)
 
 	static class TypeWithArrayOfPrimitives1 {
-		@Valid
-		int @Min(4) [] ints;
+		@Min(4)
+		int[] ints;
 	}
 
 	static class TypeWithArrayOfPrimitives2 {
-		int @Min(4) [] ints;
+		@Min(4)
+		int[] ints;
 	}
 
-	// case 3 does not make sense here so we skip it
-
 	static class TypeWithArrayOfPrimitives4 {
-		@Valid
-		@Size(min = 2)
-		int @Min(4) [] ints;
+		@Min(4)
+		@Size(min = 2, payload = ArrayValidationTarget.Array.class)
+		int[] ints;
 	}
 
 	static class TypeWithArrayOfPrimitives5 {
 		int[] ints;
 
-		@Valid
-		public int @Min(4) [] getInts() {
+		public @Min(4) int[] getInts() {
 			return ints;
 		}
 	}
@@ -495,23 +481,20 @@ public class ContainerElementConstraintsArraySupportTest {
 	static class TypeWithArrayOfPrimitives6 {
 		int[] ints;
 
-		@Valid
-		public int @Min(4) [] returnInts() {
+		public @Min(4) int[] returnInts() {
 			return ints;
 		}
 	}
 
 	static class TypeWithArrayOfPrimitives7 {
-		public void setValues(int @Min(4) [] arrayParameter) {
+		public void setValues(@Min(4) int[] arrayParameter) {
 		}
 	}
 
 	static class TypeWithArrayOfPrimitives8 {
-		public TypeWithArrayOfPrimitives8(int @Min(4) [] arrayParameter) {
+		public TypeWithArrayOfPrimitives8(@Min(4) int[] arrayParameter) {
 		}
 	}
-
-	// No wrapper available
 
 	static class Bar {
 		@Min(4)

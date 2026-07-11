@@ -110,11 +110,6 @@ class ContainerElementTypeStaxBuilder extends AbstractStaxBuilder {
 	public ContainerElementTypeConfiguration build(Set<ContainerElementTypePath> configuredPaths,
 			ContainerElementTypePath parentConstraintElementTypePath,
 			ConstraintLocation parentConstraintLocation, Type enclosingType) {
-		// HV-1428 Container element support is disabled for arrays
-		if ( TypeHelper.isArray( enclosingType ) ) {
-			throw LOG.getContainerElementConstraintsAndCascadedValidationNotSupportedOnArraysException( enclosingType );
-		}
-
 		if ( !( enclosingType instanceof ParameterizedType ) && !TypeHelper.isArray( enclosingType ) ) {
 			throw LOG.getTypeIsNotAParameterizedNorArrayTypeException( enclosingType );
 		}

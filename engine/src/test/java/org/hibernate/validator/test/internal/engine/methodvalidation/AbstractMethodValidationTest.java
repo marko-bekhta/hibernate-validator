@@ -325,8 +325,7 @@ public abstract class AbstractMethodValidationTest {
 		}
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
+	@Test
 	public void cascadingArrayParameter() {
 		Customer customer = new Customer( null );
 

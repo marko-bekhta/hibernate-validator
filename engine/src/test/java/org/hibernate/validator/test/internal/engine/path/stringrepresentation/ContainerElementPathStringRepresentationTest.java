@@ -191,8 +191,7 @@ public class ContainerElementPathStringRepresentationTest extends AbstractPathSt
 				"map[k].<map value>[0].<list element>" );
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(enabled = false)
+	@Test
 	public void testArrayPath() throws Exception {
 		Set<ConstraintViolation<Region>> constraintViolations = validator.validate( new Region(
 				Arrays.asList( new Address( null, null ) ),
@@ -201,8 +200,8 @@ public class ContainerElementPathStringRepresentationTest extends AbstractPathSt
 
 		assertCorrectPropertyPathStringRepresentations(
 				constraintViolations,
-				"array[0].<iterable element>[0].street",
-				"array[1].<iterable element>[0].<list element>"
+				"addresses[0].<iterable element>[0].street",
+				"addresses[1].<iterable element>[0].<list element>"
 		);
 	}
 

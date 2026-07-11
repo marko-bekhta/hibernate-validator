@@ -16,6 +16,7 @@ import java.lang.reflect.AnnotatedParameterizedType;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +36,7 @@ import jakarta.validation.GroupSequence;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.ConvertGroup;
 
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.group.GroupSequenceProvider;
 import org.hibernate.validator.internal.engine.ConstraintCreationContext;
 import org.hibernate.validator.internal.engine.valueextraction.ArrayElement;
@@ -43,6 +46,7 @@ import org.hibernate.validator.internal.metadata.core.AnnotationProcessingOption
 import org.hibernate.validator.internal.metadata.core.MetaConstraint;
 import org.hibernate.validator.internal.metadata.core.MetaConstraints;
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl;
+import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl.ArrayValidationTargetOverride;
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl.ConstraintType;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation.ConstraintLocationKind;
@@ -230,25 +234,36 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 				continue;
 			}
 
-			JavaBeanField javaBeanField = javaBeanHelper.field( field );
+			try {
+				JavaBeanField javaBeanField = javaBeanHelper.field( field );
 
-			if ( annotationProcessingOptions.areMemberConstraintsIgnoredFor( javaBeanField ) ) {
+				if ( annotationProcessingOptions.areMemberConstraintsIgnoredFor( javaBeanField ) ) {
+					continue;
+				}
+
+				propertyMetaData.add( findPropertyMetaData( javaBeanField ) );
+			}
+			catch (InaccessibleObjectException e) {
+				// Skip fields that cannot be made accessible due to module system
+				// restrictions (e.g., internal JDK classes like Arrays$ArrayList).
+				// Such fields will not carry constraint annotations.
 				continue;
 			}
-
-			propertyMetaData.add( findPropertyMetaData( javaBeanField ) );
 		}
 		return propertyMetaData;
 	}
 
 	private ConstrainedField findPropertyMetaData(JavaBeanField javaBeanField) {
-		Set<MetaConstraint<?>> constraints = convertToMetaConstraints(
+		Set<MetaConstraint<?>> constraints = new HashSet<>( convertToMetaConstraints(
 				findConstraints( javaBeanField, ConstraintLocationKind.FIELD ),
 				javaBeanField
-		);
+		) );
 
 		CascadingMetaDataBuilder cascadingMetaDataBuilder = findCascadingMetaData( javaBeanField );
 		Set<MetaConstraint<?>> typeArgumentsConstraints = findTypeAnnotationConstraints( javaBeanField );
+
+		processArrayConstraints( javaBeanField, javaBeanField.getAnnotatedType(),
+				ConstraintLocation.forField( javaBeanField ), constraints, typeArgumentsConstraints );
 
 		return new ConstrainedField(
 				ConfigurationSource.ANNOTATION,
@@ -344,10 +359,12 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 		}
 		else {
 			typeArgumentsConstraints = findTypeAnnotationConstraints( javaBeanExecutable );
-			returnValueConstraints = convertToMetaConstraints(
+			returnValueConstraints = new HashSet<>( convertToMetaConstraints(
 					executableConstraints.get( ConstraintType.GENERIC ),
 					javaBeanExecutable
-			);
+			) );
+			processArrayConstraints( javaBeanExecutable, javaBeanExecutable.getAnnotatedType(),
+					ConstraintLocation.forReturnValue( javaBeanExecutable ), returnValueConstraints, typeArgumentsConstraints );
 			cascadingMetaDataBuilder = findCascadingMetaData( javaBeanExecutable );
 		}
 
@@ -435,10 +452,12 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 				}
 			}
 			else {
-				parameterConstraints = Collections.emptySet();
+				parameterConstraints = new HashSet<>();
 			}
 
 			Set<MetaConstraint<?>> typeArgumentsConstraints = findTypeAnnotationConstraintsForExecutableParameter( javaBeanExecutable, parameter );
+			processArrayConstraints( javaBeanExecutable, parameter.getAnnotatedType(),
+					ConstraintLocation.forParameter( javaBeanExecutable, i ), parameterConstraints, typeArgumentsConstraints );
 			CascadingMetaDataBuilder cascadingMetaData = findCascadingMetaData( parameter );
 
 			metaData.add(
@@ -708,22 +727,20 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 	}
 
 	private Map<TypeVariable<?>, CascadingMetaDataBuilder> getTypeParametersCascadingMetaDataForArrayType(AnnotatedArrayType annotatedArrayType) {
-		// HV-1428 Container element support is disabled for arrays
-		return Collections.emptyMap();
-		//		Map<TypeVariable<?>, CascadingTypeParameter> typeParametersCascadingMetadata = CollectionHelper.newHashMap( 1 );
-		//		AnnotatedType containerElementAnnotatedType = annotatedArrayType.getAnnotatedGenericComponentType();
-		//
-		//		Map<TypeVariable<?>, CascadingTypeParameter> nestedTypeParametersCascadingMetadata = getTypeParametersCascadingMetaDataForAnnotatedType(
-		//				containerElementAnnotatedType );
-		//
-		//		TypeVariable<?> arrayElement = new ArrayElement( annotatedArrayType );
-		//		typeParametersCascadingMetadata.put( arrayElement, new CascadingTypeParameter( annotatedArrayType.getType(),
-		//				arrayElement,
-		//				annotatedArrayType.isAnnotationPresent( Valid.class ),
-		//				nestedTypeParametersCascadingMetadata,
-		//				getGroupConversions( annotatedArrayType ) ) );
-		//
-		//		return typeParametersCascadingMetadata;
+		Map<TypeVariable<?>, CascadingMetaDataBuilder> typeParametersCascadingMetadata = CollectionHelper.newHashMap( 1 );
+		AnnotatedType containerElementAnnotatedType = annotatedArrayType.getAnnotatedGenericComponentType();
+
+		Map<TypeVariable<?>, CascadingMetaDataBuilder> nestedTypeParametersCascadingMetadata = getTypeParametersCascadingMetaDataForAnnotatedType(
+				containerElementAnnotatedType );
+
+		TypeVariable<?> arrayElement = new ArrayElement( annotatedArrayType );
+		typeParametersCascadingMetadata.put( arrayElement, new CascadingMetaDataBuilder( annotatedArrayType.getType(),
+				arrayElement,
+				containerElementAnnotatedType.isAnnotationPresent( Valid.class ),
+				nestedTypeParametersCascadingMetadata,
+				getGroupConversions( containerElementAnnotatedType ) ) );
+
+		return typeParametersCascadingMetadata;
 	}
 
 	private Map<TypeVariable<?>, CascadingMetaDataBuilder> getTypeParametersCascadingMetaDataForAnnotatedType(AnnotatedType annotatedType) {
@@ -762,24 +779,22 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 	}
 
 	private Set<MetaConstraint<?>> findTypeArgumentsConstraints(Constrainable constrainable, TypeArgumentLocation location, AnnotatedType annotatedType) {
-		// HV-1428 Container element support is disabled for arrays
-		if ( !( annotatedType instanceof AnnotatedParameterizedType ) ) {
-			return Collections.emptySet();
-		}
-
 		Set<MetaConstraint<?>> typeArgumentConstraints = new HashSet<>();
 
-		// if we have an array, we need to unwrap the array first
 		if ( annotatedType instanceof AnnotatedArrayType ) {
 			AnnotatedArrayType annotatedArrayType = (AnnotatedArrayType) annotatedType;
-			Type validatedType = annotatedArrayType.getAnnotatedGenericComponentType().getType();
+			AnnotatedType componentType = annotatedArrayType.getAnnotatedGenericComponentType();
+			Type elementValidatedType = componentType.getType();
 			TypeVariable<?> arrayElementTypeArgument = new ArrayElement( annotatedArrayType );
 
-			typeArgumentConstraints.addAll( findTypeUseConstraints( constrainable, annotatedArrayType, arrayElementTypeArgument, location, validatedType ) );
+			// Leftmost-position annotations (on component type) → element constraints per JLS
+			// e.g. @Email String[] → @Email validates each String element
+			typeArgumentConstraints.addAll( findTypeUseConstraints( constrainable, componentType, arrayElementTypeArgument, location, elementValidatedType ) );
 
+			// Recurse for nested arrays / parameterized component types
 			typeArgumentConstraints.addAll( findTypeArgumentsConstraints( constrainable,
-					new NestedTypeArgumentLocation( location, arrayElementTypeArgument, validatedType ),
-					annotatedArrayType.getAnnotatedGenericComponentType() ) );
+					new NestedTypeArgumentLocation( location, arrayElementTypeArgument, elementValidatedType ),
+					componentType ) );
 		}
 		else if ( annotatedType instanceof AnnotatedParameterizedType ) {
 			AnnotatedParameterizedType annotatedParameterizedType = (AnnotatedParameterizedType) annotatedType;
@@ -832,6 +847,108 @@ public class AnnotationMetaDataProvider implements MetaDataProvider {
 		}
 
 		return constraints;
+	}
+
+	/**
+	 * Handles array-specific constraint processing: resolves leftmost-position annotation duplication,
+	 * discovers between-brackets annotations as array-level constraints, and validates that
+	 * {@code ArrayValidationTarget} payloads are only used on array types.
+	 */
+	private void processArrayConstraints(Constrainable constrainable, AnnotatedType annotatedType,
+			ConstraintLocation declarationLocation,
+			Set<MetaConstraint<?>> declarationConstraints, Set<MetaConstraint<?>> typeArgumentConstraints) {
+		if ( !( annotatedType instanceof AnnotatedArrayType ) ) {
+			validateNoArrayValidationTargetPayload( constrainable, annotatedType, declarationConstraints );
+			return;
+		}
+
+		AnnotatedArrayType annotatedArrayType = (AnnotatedArrayType) annotatedType;
+
+		deduplicateArrayConstraints( annotatedArrayType, declarationConstraints, typeArgumentConstraints );
+		addBetweenBracketsArrayConstraints( constrainable, annotatedArrayType, declarationLocation, declarationConstraints );
+	}
+
+	/**
+	 * For array types, between-brackets annotations (e.g. {@code String @Size(min=2) []}) appear only on
+	 * {@code annotatedArrayType.getAnnotations()}, not on {@code field.getDeclaredAnnotations()} nor on
+	 * {@code componentType.getAnnotations()}. Per JLS, they annotate the array type itself. This method
+	 * discovers them and adds them as declaration-level constraints that validate the array.
+	 */
+	private void addBetweenBracketsArrayConstraints(Constrainable constrainable, AnnotatedArrayType annotatedArrayType,
+			ConstraintLocation declarationLocation, Set<MetaConstraint<?>> declarationConstraints) {
+		List<ConstraintDescriptorImpl<?>> constraintDescriptors = findConstraints(
+				constrainable, annotatedArrayType.getAnnotations(), ConstraintLocationKind.TYPE_USE );
+
+		for ( ConstraintDescriptorImpl<?> constraintDescriptor : constraintDescriptors ) {
+			declarationConstraints.add( MetaConstraints.create( constraintCreationContext.getTypeResolutionHelper(),
+					constraintCreationContext.getValueExtractorManager(),
+					constraintCreationContext.getConstraintValidatorManager(), constraintDescriptor,
+					declarationLocation ) );
+		}
+	}
+
+	/**
+	 * For array types, leftmost-position annotations appear in both field.getDeclaredAnnotations() and
+	 * the leaf componentType.getAnnotations(). This method resolves the duplication based on the global
+	 * ArrayConstraintBehavior config and per-constraint ArrayValidationTarget payload overrides.
+	 * For multi-dimensional arrays, the leftmost annotation may be found at any depth of the
+	 * component type chain, so we compare against all type argument constraint annotations.
+	 */
+	private void deduplicateArrayConstraints(AnnotatedArrayType annotatedArrayType,
+			Set<MetaConstraint<?>> declarationConstraints, Set<MetaConstraint<?>> typeArgumentConstraints) {
+		if ( declarationConstraints.isEmpty() || typeArgumentConstraints.isEmpty() ) {
+			return;
+		}
+
+		Set<Annotation> typeArgAnnotations = new HashSet<>();
+		for ( MetaConstraint<?> tac : typeArgumentConstraints ) {
+			typeArgAnnotations.add( tac.getDescriptor().getAnnotationDescriptor().getAnnotation() );
+		}
+
+		ArrayConstraintBehavior behavior = constraintCreationContext.getArrayConstraintBehavior();
+
+		Iterator<MetaConstraint<?>> fieldIterator = declarationConstraints.iterator();
+		while ( fieldIterator.hasNext() ) {
+			MetaConstraint<?> fieldConstraint = fieldIterator.next();
+			Annotation annotation = fieldConstraint.getDescriptor().getAnnotationDescriptor().getAnnotation();
+
+			if ( !typeArgAnnotations.contains( annotation ) ) {
+				continue;
+			}
+
+			ArrayValidationTargetOverride override = fieldConstraint.getDescriptor().getArrayValidationTargetOverride();
+			boolean treatAsElement;
+
+			switch ( override ) {
+				case ELEMENT:
+					treatAsElement = true;
+					break;
+				case ARRAY:
+					treatAsElement = false;
+					break;
+				default:
+					treatAsElement = ( behavior == ArrayConstraintBehavior.JLS );
+					break;
+			}
+
+			if ( treatAsElement ) {
+				fieldIterator.remove();
+			}
+			else {
+				typeArgumentConstraints.removeIf( tac -> annotation.equals( tac.getDescriptor().getAnnotationDescriptor().getAnnotation() ) );
+			}
+		}
+	}
+
+	private void validateNoArrayValidationTargetPayload(Constrainable constrainable, AnnotatedType annotatedType,
+			Set<MetaConstraint<?>> constraints) {
+		for ( MetaConstraint<?> constraint : constraints ) {
+			ArrayValidationTargetOverride override = constraint.getDescriptor().getArrayValidationTargetOverride();
+			if ( override != ArrayValidationTargetOverride.DEFAULT ) {
+				throw LOG.getArrayValidationTargetOnNonArrayException( constrainable,
+						ReflectionHelper.getClassFromType( annotatedType.getType() ) );
+			}
+		}
 	}
 
 	private CascadingMetaDataBuilder getCascadingMetaData(JavaBeanAnnotatedElement annotatedElement,

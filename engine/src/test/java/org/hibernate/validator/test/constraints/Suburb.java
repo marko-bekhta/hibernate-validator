@@ -12,6 +12,8 @@ import java.util.Set;
 
 import jakarta.validation.constraints.Size;
 
+import org.hibernate.validator.engine.ArrayValidationTarget;
+
 /**
  * @author Hardy Ferentschik
  */
@@ -29,7 +31,7 @@ public class Suburb {
 	@Size(min = 2, message = "size must be between {min} and {max}")
 	private Set<String> streetNames;
 
-	@Size(min = 4, max = 1000, message = "size must be between {min} and {max}")
+	@Size(min = 4, max = 1000, message = "size must be between {min} and {max}", payload = ArrayValidationTarget.Array.class)
 	private Coordinate[] boundingBox;
 
 	@PostCodeList

@@ -4,6 +4,7 @@
  */
 package org.hibernate.validator.internal.engine;
 
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorManager;
 import org.hibernate.validator.internal.engine.valueextraction.ValueExtractorManager;
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
@@ -19,14 +20,18 @@ public class ConstraintCreationContext {
 
 	private final ValueExtractorManager valueExtractorManager;
 
+	private final ArrayConstraintBehavior arrayConstraintBehavior;
+
 	public ConstraintCreationContext(ConstraintHelper constraintHelper,
 			ConstraintValidatorManager constraintValidatorManager,
 			TypeResolutionHelper typeResolutionHelper,
-			ValueExtractorManager valueExtractorManager) {
+			ValueExtractorManager valueExtractorManager,
+			ArrayConstraintBehavior arrayConstraintBehavior) {
 		this.constraintHelper = constraintHelper;
 		this.constraintValidatorManager = constraintValidatorManager;
 		this.typeResolutionHelper = typeResolutionHelper;
 		this.valueExtractorManager = valueExtractorManager;
+		this.arrayConstraintBehavior = arrayConstraintBehavior;
 	}
 
 	public ConstraintHelper getConstraintHelper() {
@@ -43,5 +48,9 @@ public class ConstraintCreationContext {
 
 	public ValueExtractorManager getValueExtractorManager() {
 		return valueExtractorManager;
+	}
+
+	public ArrayConstraintBehavior getArrayConstraintBehavior() {
+		return arrayConstraintBehavior;
 	}
 }

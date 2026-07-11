@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 public class ContainerElementTypeConstraintsForReturnValueXmlMappingTest {
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForArrayTypeReturnValueWithXmlMapping() {
 		Validator validator = getValidator( "returnvalue-canDeclareContainerElementTypeConstraintsForArrayType-mapping.xml" );
@@ -59,7 +59,7 @@ public class ContainerElementTypeConstraintsForReturnValueXmlMappingTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForListContainingArrayTypeReturnValueWithXmlMapping() {
 		Validator validator = getValidator( "returnvalue-canDeclareContainerElementTypeConstraintsForListContainingArrayType-mapping.xml" );
@@ -79,7 +79,7 @@ public class ContainerElementTypeConstraintsForReturnValueXmlMappingTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForMultiDimensionalArrayTypeReturnValueWithXmlMapping() {
 		Validator validator = getValidator( "returnvalue-canDeclareContainerElementTypeConstraintsForMultiDimensionalArrayType-mapping.xml" );
@@ -131,9 +131,7 @@ public class ContainerElementTypeConstraintsForReturnValueXmlMappingTest {
 		fishTank.test8( Arrays.asList( "Too long" ) );
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
-	//@Test(expectedExceptions = UnexpectedTypeException.class, expectedExceptionsMessageRegExp = "HV000030:.*")
+	@Test(expectedExceptions = UnexpectedTypeException.class, expectedExceptionsMessageRegExp = "HV000030:.*")
 	@TestForIssue(jiraKey = "HV-1279")
 	public void configuringConstraintsOnGenericTypeArgumentOfArrayThrowsException() {
 		Validator validator = getValidator( "returnvalue-configuringConstraintsOnGenericTypeArgumentOfArrayThrowsException-mapping.xml" );

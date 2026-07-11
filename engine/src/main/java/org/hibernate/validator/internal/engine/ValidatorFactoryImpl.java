@@ -7,6 +7,7 @@ package org.hibernate.validator.internal.engine;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowMultipleCascadedValidationOnReturnValues;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowOverridingMethodAlterParameterConstraint;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowParallelMethodsDefineParameterConstraints;
+import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineArrayConstraintBehavior;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineBeanMetaDataClassNormalizer;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineConstraintExpressionLanguageFeatureLevel;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineConstraintMappings;
@@ -185,7 +186,8 @@ public class ValidatorFactoryImpl implements HibernateValidatorFactory {
 		ConstraintHelper constraintHelper = ConstraintHelper.forAllBuiltinConstraints();
 		TypeResolutionHelper typeResolutionHelper = new TypeResolutionHelper();
 
-		this.constraintCreationContext = new ConstraintCreationContext( constraintHelper, constraintValidatorManager, typeResolutionHelper, valueExtractorManager );
+		this.constraintCreationContext = new ConstraintCreationContext( constraintHelper, constraintValidatorManager, typeResolutionHelper, valueExtractorManager,
+				determineArrayConstraintBehavior( hibernateSpecificConfig, properties ) );
 
 		this.executableHelper = new ExecutableHelper( typeResolutionHelper );
 		this.javaBeanHelper = new JavaBeanHelper( ValidatorFactoryConfigurationHelper.determineGetterPropertySelectionStrategy( hibernateSpecificConfig, properties, externalClassLoader ),

@@ -43,6 +43,7 @@ import jakarta.validation.valueextraction.ExtractedValue;
 import jakarta.validation.valueextraction.UnwrapByDefault;
 import jakarta.validation.valueextraction.ValueExtractor;
 
+import org.hibernate.validator.engine.ArrayValidationTarget;
 import org.hibernate.validator.path.ContainerElementNode;
 import org.hibernate.validator.path.PropertyNode;
 import org.hibernate.validator.testutil.TestForIssue;
@@ -510,7 +511,7 @@ public class MutableNodeTest {
 	@TestForIssue(jiraKey = "HV-1946")
 	public void testIndexedContainerElementMultipleFailuresCorrectPath() {
 		class People {
-			@Pattern(regexp = "[a-z]+")
+			@Pattern(regexp = "[a-z]+", payload = ArrayValidationTarget.Array.class)
 			Person[] people;
 
 			public People(Person... people) {

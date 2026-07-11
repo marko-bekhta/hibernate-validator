@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 import jakarta.validation.ClockProvider;
 import jakarta.validation.metadata.ConstraintDescriptor;
 
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidator;
 import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorInitializationContext;
 import org.hibernate.validator.constraintvalidation.spi.DefaultConstraintValidatorFactory;
@@ -75,7 +76,8 @@ public class ConstraintValidatorInitializationHelper {
 		return new ConstraintCreationContext( ConstraintHelper.forAllBuiltinConstraints(),
 				new ConstraintValidatorManagerImpl( new DefaultConstraintValidatorFactory(), getDummyConstraintValidatorInitializationContext() ),
 				new TypeResolutionHelper(),
-				new ValueExtractorManager( Collections.emptySet() ) );
+				new ValueExtractorManager( Collections.emptySet() ),
+				ArrayConstraintBehavior.JLS );
 	}
 
 	public static HibernateConstraintValidatorInitializationContext getConstraintValidatorInitializationContext(

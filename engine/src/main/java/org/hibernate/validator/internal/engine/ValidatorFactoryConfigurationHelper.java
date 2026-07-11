@@ -18,6 +18,7 @@ import java.util.Set;
 import jakarta.validation.spi.ConfigurationState;
 
 import org.hibernate.validator.HibernateValidatorConfiguration;
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.internal.cfg.context.DefaultConstraintMapping;
 import org.hibernate.validator.internal.engine.constraintdefinition.ConstraintDefinitionContribution;
@@ -199,6 +200,17 @@ final class ValidatorFactoryConfigurationHelper {
 		}
 
 		return tmpFailFastOnPropertyViolation;
+	}
+
+	static ArrayConstraintBehavior determineArrayConstraintBehavior(AbstractConfigurationImpl<?> configuration, Map<String, String> properties) {
+		ArrayConstraintBehavior behavior = configuration != null ? configuration.getArrayConstraintBehavior() : null;
+
+		String propertyStringValue = properties.get( HibernateValidatorConfiguration.ARRAY_CONSTRAINT_BEHAVIOR );
+		if ( propertyStringValue != null ) {
+			behavior = ArrayConstraintBehavior.of( propertyStringValue );
+		}
+
+		return behavior != null ? behavior : ArrayConstraintBehavior.JLS;
 	}
 
 	static ScriptEvaluatorFactory determineScriptEvaluatorFactory(ConfigurationState configurationState, Map<String, String> properties,

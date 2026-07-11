@@ -34,6 +34,7 @@ import jakarta.validation.spi.ValidationProvider;
 import jakarta.validation.valueextraction.ValueExtractor;
 
 import org.hibernate.validator.BaseHibernateValidatorConfiguration;
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.constraintvalidation.spi.DefaultConstraintValidatorFactory;
 import org.hibernate.validator.internal.cfg.context.DefaultConstraintMapping;
@@ -134,6 +135,7 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 	private ExpressionLanguageFeatureLevel customViolationExpressionLanguageFeatureLevel;
 	private ProcessedBeansTrackingVoter processedBeansTrackingVoter;
 	private boolean showValidatedValuesInTraceLogs;
+	private ArrayConstraintBehavior arrayConstraintBehavior;
 
 	protected AbstractConfigurationImpl(BootstrapState state) {
 		this();
@@ -302,6 +304,12 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 	@Override
 	public T failFastOnPropertyViolation(boolean failFastOnPropertyViolation) {
 		this.failFastOnPropertyViolation = failFastOnPropertyViolation;
+		return thisAsT();
+	}
+
+	@Override
+	public T arrayConstraintBehavior(ArrayConstraintBehavior arrayConstraintBehavior) {
+		this.arrayConstraintBehavior = arrayConstraintBehavior;
 		return thisAsT();
 	}
 
@@ -518,6 +526,10 @@ public abstract class AbstractConfigurationImpl<T extends BaseHibernateValidator
 
 	public final boolean getFailFastOnPropertyViolation() {
 		return this.failFastOnPropertyViolation;
+	}
+
+	public final ArrayConstraintBehavior getArrayConstraintBehavior() {
+		return this.arrayConstraintBehavior;
 	}
 
 	@Override

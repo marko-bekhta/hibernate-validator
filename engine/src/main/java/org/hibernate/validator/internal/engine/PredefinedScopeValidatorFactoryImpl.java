@@ -7,6 +7,7 @@ package org.hibernate.validator.internal.engine;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowMultipleCascadedValidationOnReturnValues;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowOverridingMethodAlterParameterConstraint;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineAllowParallelMethodsDefineParameterConstraints;
+import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineArrayConstraintBehavior;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineBeanMetaDataClassNormalizer;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineConstraintExpressionLanguageFeatureLevel;
 import static org.hibernate.validator.internal.engine.ValidatorFactoryConfigurationHelper.determineConstraintMappings;
@@ -165,7 +166,8 @@ public class PredefinedScopeValidatorFactoryImpl implements PredefinedScopeHiber
 
 		ConstraintCreationContext constraintCreationContext = new ConstraintCreationContext(
 				constraintHelper,
-				constraintValidatorManager, typeResolutionHelper, valueExtractorManager
+				constraintValidatorManager, typeResolutionHelper, valueExtractorManager,
+				determineArrayConstraintBehavior( hibernateSpecificConfig, properties )
 		);
 
 		ExecutableHelper executableHelper = new ExecutableHelper( typeResolutionHelper );

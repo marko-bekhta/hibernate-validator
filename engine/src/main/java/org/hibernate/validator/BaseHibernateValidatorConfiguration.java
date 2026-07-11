@@ -20,6 +20,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.valueextraction.ValueExtractor;
 
+import org.hibernate.validator.cfg.ArrayConstraintBehavior;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.hibernate.validator.constraints.ScriptAssert;
@@ -178,6 +179,15 @@ public interface BaseHibernateValidatorConfiguration<S extends BaseHibernateVali
 	 */
 	@Incubating
 	String FAIL_FAST_ON_PROPERTY_VIOLATION = "hibernate.validator.fail_fast_on_property_violation";
+
+	/**
+	 * Property corresponding to the {@link #arrayConstraintBehavior} method.
+	 * Accepts {@code jls} or {@code legacy}. Defaults to {@code jls}.
+	 *
+	 * @since 9.2
+	 */
+	@Incubating
+	String ARRAY_CONSTRAINT_BEHAVIOR = "hibernate.validator.array_constraint_behavior";
 
 	/**
 	 * <p>
@@ -522,4 +532,17 @@ public interface BaseHibernateValidatorConfiguration<S extends BaseHibernateVali
 	 */
 	@Incubating
 	S processedBeansTrackingVoter(ProcessedBeansTrackingVoter processedBeanTrackingVoter);
+
+	/**
+	 * Controls how constraint annotations on array-typed declarations are interpreted.
+	 * <p>
+	 * With {@link ArrayConstraintBehavior#JLS} (default), leftmost-position annotations target the element type
+	 * per JLS §9.7.4. With {@link ArrayConstraintBehavior#LEGACY}, all annotations target the array itself (BV 1.1).
+	 *
+	 * @param arrayConstraintBehavior the behavior to apply
+	 * @return {@code this} following the chaining method pattern
+	 * @since 9.2
+	 */
+	@Incubating
+	S arrayConstraintBehavior(ArrayConstraintBehavior arrayConstraintBehavior);
 }

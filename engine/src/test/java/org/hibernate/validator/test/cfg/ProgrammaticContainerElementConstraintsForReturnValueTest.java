@@ -173,7 +173,7 @@ public class ProgrammaticContainerElementConstraintsForReturnValueTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForArrayTypedReturnValueProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();
@@ -202,7 +202,7 @@ public class ProgrammaticContainerElementConstraintsForReturnValueTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForListContainingArrayTypeReturnValueProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();
@@ -231,7 +231,7 @@ public class ProgrammaticContainerElementConstraintsForReturnValueTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1239")
 	public void canDeclareContainerElementConstraintsForMultiDimensionalArrayTypeReturnValueProgrammatically() {
 		ConstraintMapping newMapping = config.createConstraintMapping();
@@ -334,9 +334,7 @@ public class ProgrammaticContainerElementConstraintsForReturnValueTest {
 		fishTank.test8( Arrays.asList( "Too long" ) );
 	}
 
-	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
-	//@Test(expectedExceptions = UnexpectedTypeException.class, expectedExceptionsMessageRegExp = "HV000030:.*")
+	@Test(expectedExceptions = UnexpectedTypeException.class, expectedExceptionsMessageRegExp = "HV000030:.*")
 	@TestForIssue(jiraKey = "HV-1279")
 	public void configuringConstraintsOnGenericTypeArgumentOfArrayThrowsException() {
 		ConstraintMapping newMapping = config.createConstraintMapping();

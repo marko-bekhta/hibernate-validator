@@ -16,6 +16,7 @@ import java.util.Set;
 import jakarta.validation.ConstraintViolation;
 
 import org.hibernate.validator.constraints.NullOrNotEmpty;
+import org.hibernate.validator.engine.ArrayValidationTarget;
 import org.hibernate.validator.test.constraints.annotations.AbstractConstrainedTest;
 
 import org.testng.annotations.Test;
@@ -176,21 +177,21 @@ public class NullOrNotEmptyConstrainedTest extends AbstractConstrainedTest {
 	}
 
 	private static class Arrays {
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final String[] strings;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final byte[] bytes;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final short[] shorts;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final int[] ints;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final long[] longs;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final float[] floats;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final double[] doubles;
-		@NullOrNotEmpty
+		@NullOrNotEmpty(payload = ArrayValidationTarget.Array.class)
 		private final boolean[] booleans;
 
 		private Arrays(String[] strings, byte[] bytes, short[] shorts, int[] ints, long[] longs, float[] floats, double[] doubles, boolean[] booleans) {

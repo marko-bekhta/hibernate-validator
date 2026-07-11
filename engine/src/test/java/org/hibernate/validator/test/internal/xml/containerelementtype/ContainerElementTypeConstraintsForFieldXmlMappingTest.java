@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
 public class ContainerElementTypeConstraintsForFieldXmlMappingTest {
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForArrayTypeFieldWithXmlMapping() {
 		Validator validator = getValidator( "field-canDeclareContainerElementTypeConstraintsForArrayType-mapping.xml" );
@@ -48,7 +48,7 @@ public class ContainerElementTypeConstraintsForFieldXmlMappingTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForListContainingArrayTypeFieldWithXmlMapping() {
 		Validator validator = getValidator( "field-canDeclareContainerElementTypeConstraintsForListContainingArrayType-mapping.xml" );
@@ -61,7 +61,7 @@ public class ContainerElementTypeConstraintsForFieldXmlMappingTest {
 	}
 
 	// HV-1428 Container element support is disabled for arrays
-	@Test(expectedExceptions = ValidationException.class, expectedExceptionsMessageRegExp = "HV000226:.*")
+	@Test
 	@TestForIssue(jiraKey = "HV-1291")
 	public void canDeclareContainerElementTypeConstraintsForMultiDimensionalArrayTypeFieldWithXmlMapping() {
 		Validator validator = getValidator( "field-canDeclareContainerElementTypeConstraintsForMultiDimensionalArrayType-mapping.xml" );
