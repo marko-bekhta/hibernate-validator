@@ -11,6 +11,7 @@
 
 ## What is it?
 
+
 This is the reference implementation of [Jakarta Validation 3.1](https://jakarta.ee/specifications/bean-validation/3.1/).
 Jakarta Validation defines a metadata model and API for JavaBean as well as method validation.
 The default metadata source are annotations, with the ability to override and extend
