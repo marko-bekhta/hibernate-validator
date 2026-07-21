@@ -11,10 +11,61 @@ on:
 permissions: { }
 
 jobs:
-  report:
-    uses: hibernate/.github/.github/workflows/ci-reporting.yml@main
+  test-comment:
+    runs-on: ubuntu-latest
     permissions:
-      actions: read
       contents: read
       pull-requests: write
-    secrets: inherit
+    steps:
+      - name: Determine PR number
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_TYPE: ${{ github.event.workflow_run.event }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          REPO: ${{ github.event.repository.full_name }}
+        run: |
+          if [ "$EVENT_TYPE" != "pull_request" ]; then
+            echo "Not a PR, skipping"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          PR_NUMBER=$(gh pr view "$HEAD_BRANCH" --repo "$REPO" --json number --jq '.number')
+          echo "number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+      - name: Test listing comments
+        if: steps.pr.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.event.repository.full_name }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          MARKER: '<!-- test-marker -->'
+        run: |
+          echo "=== Token permissions ==="
+          gh api -H "Accept: application/vnd.github+json" /repos/${REPO} --jq '.permissions' || echo "Cannot read repo permissions"
+          
+          echo "=== Listing comments ==="
+          ESCAPED_MARKER=$(echo "$MARKER" | sed 's/["\]/\\&/g')
+          if ! RESPONSE=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" 2>&1); then
+            echo "FAILED to list comments: $RESPONSE"
+          else
+            echo "Listed comments OK, count: $(echo "$RESPONSE" | jq 'length')"
+            COMMENT_ID=$(echo "$RESPONSE" | jq -r ".[] | select(.body | startswith(\"${ESCAPED_MARKER}\")) | .id" | head -1)
+            echo "Matching comment ID: '${COMMENT_ID}'"
+          fi
+          
+          echo "=== Creating/updating comment ==="
+          BODY=$(printf '%s\nTest comment from workflow_run' "$MARKER")
+          if [ -n "$COMMENT_ID" ]; then
+            echo "Updating comment $COMMENT_ID"
+            gh api "repos/${REPO}/issues/comments/${COMMENT_ID}" \
+              -X PATCH -f body="$BODY"
+          else
+            echo "Creating new comment"
+            gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
+              -f body="$BODY"
+          fi
+          
+          echo "=== Testing gh pr comment ==="
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "Test via gh pr comment" || echo "gh pr comment FAILED"
