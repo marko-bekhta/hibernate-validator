@@ -129,6 +129,23 @@
             <artifactId>testng</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Phase 2 (JUnit migration): uncomment to enable JUnit Jupiter and the test extension
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>hibernate-validator-test-utils-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>hibernate-validator-test-utils</artifactId>
@@ -225,6 +242,26 @@
             </testResource>
         </testResources>
         <plugins>
+            <!-- Phase 2 (JUnit migration): uncomment to compile testExtension sources
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-test-extension-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/testExtension/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
             <plugin>
                 <groupId>org.jboss.maven.plugins</groupId>
                 <artifactId>maven-injection-plugin</artifactId>
