@@ -93,6 +93,7 @@
         <module>bom</module>
         <module>test-utils</module>
         <module>engine</module>
+        <module>test-utils-jupiter</module>
         <module>tck-runner</module>
         <module>annotation-processor</module>
         <module>cdi</module>
@@ -195,6 +196,7 @@
         <version.org.testng>7.12.0</version.org.testng>
         <version.org.assertj.assertj-core>3.27.7</version.org.assertj.assertj-core>
         <version.junit>4.13.2</version.junit>
+        <version.org.junit.jupiter>5.12.2</version.org.junit.jupiter>
         <version.org.easymock>5.6.0</version.org.easymock>
         <version.io.rest-assured>6.0.1</version.io.rest-assured>
         <version.org.apache.groovy>5.0.8</version.org.apache.groovy>
@@ -500,6 +502,16 @@
                 <version>${version.junit}</version>
             </dependency>
             <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${version.org.junit.jupiter}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${version.org.junit.jupiter}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>${version.org.testng}</version>
@@ -563,6 +575,11 @@
             <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-core-impl</artifactId>
+                <version>${version.org.jboss.weld.weld}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.weld.se</groupId>
+                <artifactId>weld-se-core</artifactId>
                 <version>${version.org.jboss.weld.weld}</version>
             </dependency>
             <dependency>

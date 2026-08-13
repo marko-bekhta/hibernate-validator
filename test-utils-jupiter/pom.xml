@@ -94,6 +94,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- CDI API (managed by jakartaee-bom) -->
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Weld SE for CDI bootstrap -->
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.glassfish.expressly</groupId>
