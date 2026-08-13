@@ -102,6 +102,7 @@
         <module>integrationtest/java/modules/simple</module>
         <module>integrationtest/java/modules/no-el</module>
         <module>integrationtest/java/modules/test-utils</module>
+        <module>integrationtest/java/modules/test-utils-jupiter</module>
         <module>integrationtest/java/modules/cdi</module>
     </modules>
 
