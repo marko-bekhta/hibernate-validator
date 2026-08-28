@@ -53,6 +53,9 @@ env:
 permissions:
   contents: read
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: ${{matrix.os.name}}
