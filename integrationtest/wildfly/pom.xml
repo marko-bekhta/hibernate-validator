@@ -248,6 +248,12 @@
     </build>
     <profiles>
         <profile>
+            <id>reproducibility-check</id>
+            <properties>
+                <skip.failsafe.execution>true</skip.failsafe.execution>
+            </properties>
+        </profile>
+        <profile>
             <id>testWithJdk11+</id>
             <activation>
                 <property>
