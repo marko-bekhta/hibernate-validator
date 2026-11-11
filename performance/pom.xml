@@ -130,6 +130,8 @@
                                     <manifestEntries>
                                         <Implementation-Title>${beanvalidation-impl.name}</Implementation-Title>
                                         <Implementation-Version>${beanvalidation-impl.version}</Implementation-Version>
+                                        <!-- Preserve versioned dependency classes, including Hibernate Accessor's JDK 24+ implementation. -->
+                                        <Multi-Release>true</Multi-Release>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
